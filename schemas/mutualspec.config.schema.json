@@ -85,7 +85,8 @@
             "issue": { "enum": ["4.2", "5.0", "6", "7"] },
             "brex": { "type": "string", "description": "プロジェクト BREX の DMC（またはファイルパス）" },
             "csdbDir": { "type": "string" },
-            "validator": { "enum": ["s1kd-tools", "s1000d-stack-mcp"], "default": "s1kd-tools" }
+            "specDir": { "type": "string", "description": "S1000D の配布物（XSD・default BREX）を置いたフォルダー。validator が s1000d-stack のときに使う。省略時は環境変数 S1000D_SPEC_DIR" },
+            "validator": { "enum": ["s1000d-stack", "s1kd-tools"], "default": "s1000d-stack", "description": "書き出した DM の検証器。s1000d-stack は @shuji-bonji/s1000d-core をライブラリとして呼ぶ。s1kd-tools は外部コマンド（GPL-3.0）として呼ぶ" }
           },
           "additionalProperties": false
         }

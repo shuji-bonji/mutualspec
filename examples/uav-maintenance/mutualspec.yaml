@@ -33,7 +33,7 @@ profiles:
     enabled: true
     modelIdentCode: UAVM
     issue: "7"
-    validator: s1kd-tools
+    validator: s1000d-stack
     csdbDir: build/csdb
 output:
   formats: [text, sarif, md]

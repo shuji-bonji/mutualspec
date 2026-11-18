@@ -15,7 +15,8 @@ MutualSpec の主要な決定の記録です。形式: 状況 → 決定 → 検
 | [0009](0009-gates-and-human-approval.md) | ゲートと人の承認: 機械条件は必要条件、G1 / G4 の人の承認は必須 | Accepted |
 | [0010](0010-git-as-loop-ledger.md) | Git をループの台帳にする: 1 ループ = 1 ブランチ + 1 PR + ループ記録 | Accepted |
 | [0011](0011-implementation-stack.md) | 実装スタック: TypeScript / Node.js（npm 配布）。一部役割の後からの書き換えを許容 | Accepted |
-| [0012](0012-s1000d-as-profile.md) | S1000D はコアではなくプロファイル | Accepted |
+| [0012](0012-s1000d-as-profile.md) | S1000D はコアではなくプロファイル | Accepted（検証器の部分は 0016 で改訂） |
 | [0013](0013-sarif-reporting.md) | 検証結果の形式: finding（JSON）と SARIF 2.1.0 | Accepted |
 | [0014](0014-quality-by-29148.md) | 要求品質の基準は ISO/IEC/IEEE 29148、文型は EARS を任意で | Accepted |
 | [0015](0015-rename-to-mutualspec.md) | フレームワーク名を SpecLoop から MutualSpec に変更し、名前空間（npm・CLI・`$id`・識別子）を揃える | Accepted |
+| [0016](0016-s1000d-stack-as-default-validator.md) | S1000D の既定の検証器を s1000d-stack にし、s1kd-tools を選択肢として残す | Accepted |

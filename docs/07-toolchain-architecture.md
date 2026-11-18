@@ -4,7 +4,7 @@
 
 会話（第 5 回）の結論「既存のオープンソースと標準を役割分担させれば、新規に大きな基盤を作る必要はない」に従い、**自作は継ぎ目だけ**に限定します（P10）。
 
-- **再利用**: パース（remark / yaml）、スキーマ検証（Ajv）、図（Mermaid）、報告（SARIF）、LLM 接続（MCP）、S1000D 検証（s1kd-tools など）、版管理と CI（Git / GitHub Actions）。
+- **再利用**: パース（remark / yaml）、スキーマ検証（Ajv）、図（Mermaid）、報告（SARIF）、LLM 接続（MCP）、S1000D 検証（s1000d-stack の s1000d-core。s1kd-tools も選べる）、版管理と CI（Git / GitHub Actions）。
 - **自作**: Spec Graph の構築、MSRX ルールエンジンと組込みチェック、Context Pack 生成、Change Proposal の適用器、ビュー・スケルトン生成器、CLI、S1000D 書き出し器（写像部分のみ）。
 
 ## 2. コンポーネント構成
@@ -32,8 +32,8 @@ flowchart TB
     MM["Mermaid / mermaid-cli"]
     SARIF["SARIF 2.1.0"]
     MCPSDK["MCP TypeScript SDK"]
-    S1KD["s1kd-tools<br/>s1kd-validate / s1kd-brexcheck"]
-    S1STACK["s1000d-stack MCP<br/>（任意）"]
+    S1STACK["s1000d-core<br/>（s1000d-stack）"]
+    S1KD["s1kd-tools<br/>s1kd-validate / s1kd-brexcheck<br/>（選択肢）"]
     GIT["Git"]
   end
   H --> CLI
@@ -52,8 +52,8 @@ flowchart TB
   CORE --> MM
   CORE --> SARIF
   MCP --> MCPSDK
-  S1K --> S1KD
-  S1K -.-> S1STACK
+  S1K --> S1STACK
+  S1K -.-> S1KD
   CLI --> GIT
 ```
 
@@ -108,7 +108,8 @@ flowchart LR
 | CI | GitHub Actions（他 CI も CLI で可） | 再利用 | §5 |
 | LLM 連携 | Model Context Protocol（MCP）、TypeScript SDK | 再利用 | サーバーの tools は自作 |
 | エージェント向け説明 | AGENTS.md（慣行） | 再利用 | `mutualspec agents-md` で生成 |
-| S1000D の検証 | s1kd-tools（s1kd-validate, s1kd-brexcheck）、libxml2 | 再利用 | GPL-3.0。外部コマンドとして呼び出す |
+| S1000D の検証 | s1000d-stack の `@shuji-bonji/s1000d-core`（XSD は libxml2-wasm） | 再利用（既定） | npm の依存としてライブラリで呼ぶ（[ADR-0016](adr/0016-s1000d-stack-as-default-validator.md)） |
+| S1000D の検証（選択肢） | s1kd-tools（s1kd-validate, s1kd-brexcheck） | 再利用（任意） | GPL-3.0。`validator: s1kd-tools` のときだけ外部コマンドとして呼び出す |
 | S1000D の LLM 向け読み書き | s1000d-stack（s1000d-brex-mcp / verify-mcp / reader-mcp / writer-mcp） | 再利用（任意） | 既存の MCP 群と役割が重ならないよう、MutualSpec は「仕様 → DM の写像」までを担う |
 | 文章校正 | textlint（prh 辞書）、Vale | 併用（任意） | 文体は既存ツール、意味は MutualSpec |
 | 外部契約の検査 | Spectral（OpenAPI / AsyncAPI） | 併用（任意） | interface の `contract` |
@@ -123,7 +124,7 @@ flowchart LR
   - CLI（入口）: スコープなしの `mutualspec`。bin も `mutualspec`（`npx mutualspec …`）。短い別名 `mspec` は npm の既存パッケージ `mspec` が同名の bin を持つため設けない。
   - ライブラリ: `@shuji-bonji/mutualspec-core`、`-mcp`、`-schemas`、`-rules-core`、`-generator-ts`、`-profile-s1000d`。
   - スキーマ `$id`: `https://shuji-bonji.github.io/mutualspec/schemas/0.1/…`（リポジトリ `shuji-bonji/mutualspec` の GitHub Pages）。リポジトリ名に依存するため、改名時の移し方は [ADR-0015](adr/0015-rename-to-mutualspec.md) に従う。
-- 外部コマンド（s1kd-tools）はプロファイル有効時のみ必要。見つからなければ G2 の S1000D 検査を `skipped` として明示する（黙って通さない）。
+- S1000D の配布物（`specDir` / `S1000D_SPEC_DIR`）と、`validator: s1kd-tools` のときの外部コマンドは、プロファイル有効時のみ必要。見つからなければ G2 の S1000D 検査を `skipped` として明示する（黙って通さない）。
 
 ## 5. CI 連携
 

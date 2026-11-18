@@ -1,6 +1,6 @@
 # ADR-0012: S1000D はコアではなくプロファイル
 
-- 状態: Accepted
+- 状態: Accepted（検証器の部分は 0016 で改訂）
 - 日付: 2026-11-19
 
 ## 状況
@@ -11,7 +11,7 @@
 
 - コアのメタモデルは S1000D に依存しない。S1000D の考え方（DM / DMC / BREX / issue / applicability）は写像として取り込む。
 - S1000D への書き出し・検証は `profiles.s1000d` として提供する（procedure → 手順 DM、decision → 記述 DM の表）。
-- 検証は s1kd-tools（外部コマンド）または s1000d-stack の MCP に委ねる。
+- 検証は s1kd-tools（外部コマンド）または s1000d-stack の MCP に委ねる（ADR-0016 で改訂: 既定は s1000d-stack の s1000d-core をライブラリとして呼び、s1kd-tools は選択肢）。
 - S1000D の仕様書・スキーマ・default BREX は同梱しない。
 
 ## 検討した代替案
