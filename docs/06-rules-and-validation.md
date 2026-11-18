@@ -233,4 +233,5 @@ ERROR   MSR-CORE-00301  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md:31  REQ
 | Spectral（Stoplight） | YAML / JSON に JSONPath でルールを書く点で MSRX の構造ルールと近い。MSRX は複数ファイルを統合した Graph を対象にし、語彙・境界・意味の組込みチェックを持つ点が異なる。interface の外部契約（OpenAPI / AsyncAPI）の検査には Spectral をそのまま併用できる |
 | Schematron（ISO/IEC 19757-3） | XML 向けのルール言語。S1000D プロファイルで書き出した DM に対して、BREX を補う追加ルールが必要な場合に使える（任意） |
 | textlint / Vale | 文章の校正ツール。本文の文体（です・ます統一など）は既存ツールに任せ、MutualSpec は用語・曖昧語・文型など**仕様の意味に関わる**検査だけを持つ。textlint の prh 辞書を glossary から生成する機能を将来提供（[12](12-roadmap.md)） |
-| s1kd-brexcheck / s1kd-validate | S1000D プロファイルで書き出した DM の BREX・スキーマ検証に使う（[10](10-s1000d-profile.md)） |
+| s1000d-stack（s1000d-core） | S1000D プロファイルで書き出した DM の BREX・スキーマ・参照の検証に使う既定の検証器（[10](10-s1000d-profile.md)） |
+| s1kd-brexcheck / s1kd-validate | 同じ検証の選択肢（`validator: s1kd-tools`） |

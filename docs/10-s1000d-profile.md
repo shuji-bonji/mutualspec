@@ -4,7 +4,7 @@ S1000D は MutualSpec の**考え方の源泉**（DM・DMC・BREX）であると
 コアは S1000D に依存せず、S1000D はプロファイル `profiles.s1000d` として足します（[ADR-0012](adr/0012-s1000d-as-profile.md)）。
 
 > [!IMPORTANT]
-> S1000D® は ASD の登録商標です。S1000D の仕様書・XML スキーマ・デフォルト BREX は再配布が認められていないため、MutualSpec は同梱しません。利用者が s1000d.org から入手し、s1kd-tools などの検証ツールに与えてください。
+> S1000D® は ASD の登録商標です。S1000D の仕様書・XML スキーマ・デフォルト BREX は再配布が認められていないため、MutualSpec は同梱しません。利用者が s1000d.org から入手し、`specDir`（または環境変数 `S1000D_SPEC_DIR`）で場所を指定してください。
 
 ## 1. 範囲
 
@@ -26,7 +26,8 @@ profiles:
     issue: "7"                  # 対象 Issue（4.2 / 5.0 / 6 / 7）
     brex: path/or/DMC-of-project-BREX
     csdbDir: build/csdb         # 書き出し先
-    validator: s1kd-tools       # s1kd-tools | s1000d-stack-mcp
+    specDir: ~/s1000d/issue7    # 配布物の場所。省略時は S1000D_SPEC_DIR
+    validator: s1000d-stack     # s1000d-stack（既定） | s1kd-tools
 ```
 
 ## 3. 識別子の写像（SMC → DMC）
@@ -79,17 +80,16 @@ S1000D の手順 DM は「構造」を持ちますが、判断表のような**�
 ```mermaid
 flowchart LR
   SM["Spec Module<br/>procedure / decision"] -->|"mutualspec export s1000d"| DM["DM（XML）<br/>build/csdb/"]
-  DM --> XSD["s1kd-validate<br/>XML / スキーマ"]
-  DM --> BREX["s1kd-brexcheck<br/>プロジェクト BREX<br/>（-l で階層 BREX）"]
-  DM -.->|"任意"| STACK["s1000d-stack<br/>verify-mcp / reader-mcp"]
-  XSD --> REP["finding（L1 として報告）<br/>SARIF"]
-  BREX --> REP
-  STACK --> REP
+  DM -->|"既定"| CORE["s1000d-core（ライブラリ）<br/>XSD・BREX の連鎖・参照切れ"]
+  DM -.->|"validator: s1kd-tools"| S1KD["s1kd-validate / s1kd-brexcheck<br/>（外部コマンド）"]
+  CORE --> REP["finding（L1 として報告）<br/>SARIF"]
+  S1KD --> REP
 ```
 
-- `mutualspec export s1000d --check` は書き出し後に `s1kd-validate` と `s1kd-brexcheck` を呼び、結果を MutualSpec の finding（ruleId は `S1000D-XSD` / `S1000D-BREX:<brDecisionIdentNumber>`）に変換して、**元の Spec Module の行**に対応づけて報告します。違反の原因が MutualSpec 側（写像）か仕様側かを区別できるようにします。
-- s1kd-tools は GPL-3.0 の外部コマンドとして呼び出します（リンクしない）。
-- validator を `s1000d-stack-mcp` にした場合は、s1000d-verify-mcp（XSD + BREX + 参照切れ）を呼び出します。
+- `mutualspec export s1000d --check` は書き出し後に検証器を呼び、結果を MutualSpec の finding（ruleId は `S1000D-XSD` / `S1000D-BREX:<brDecisionIdentNumber>`）に変換して、**元の Spec Module の行**に対応づけて報告します。違反の原因が MutualSpec 側（写像）か仕様側かを区別できるようにします。
+- 既定の検証器は s1000d-stack です（[ADR-0016](adr/0016-s1000d-stack-as-default-validator.md)）。`@shuji-bonji/s1000d-core` をライブラリとして呼び、XSD による検証、BREX の照合（DM の `brexDmRef` から上位の BREX へたどり、すべての層と照合する）、参照切れの検出を行います。プロジェクト BREX が DM から参照されていない場合も、`brex` に指定した BREX と照合します。
+- `validator: s1kd-tools` にした場合は、`s1kd-validate` と `s1kd-brexcheck` を GPL-3.0 の外部コマンドとして呼び出します（リンクしない）。既に s1kd-tools で運用している利用者のための選択肢です。
+- 同じ DM を両方の検証器で検証して結果を突き合わせることを、プロファイルのテストに含めます（検証器の取り違えや見落としを見つけるため）。
 - G2 の条件: 書き出した DM の XSD・BREX エラー 0（プロファイル有効時）。
 
 ## 7. BREX と MSRX の関係

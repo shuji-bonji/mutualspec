@@ -21,7 +21,7 @@
 | | `mutualspec mcp [--stdio]` | MCP サーバーを起動 | 全般 |
 | | `mutualspec agents-md [--write]` | AGENTS.md の MutualSpec 節を生成 | — |
 | 実現 | `mutualspec generate ts [--aggregate <AGG>] [--decision <DEC>] [--check]` | スケルトン・判断表コード・シナリオのテスト雛形を生成 | Realize |
-| | `mutualspec export s1000d [--module <SMC>] [--check]` | S1000D DM へ書き出し、s1kd-tools で検証（[10](10-s1000d-profile.md)） | Realize |
+| | `mutualspec export s1000d [--module <SMC>] [--check]` | S1000D DM へ書き出し、s1000d-stack（または s1kd-tools）で検証（[10](10-s1000d-profile.md)） | Realize |
 | 検証（実装） | `mutualspec trace [--format md\|csv\|json]` | トレース行列（要求 → 実現 → シナリオ → テスト → 合否） | Verify |
 | | `mutualspec verify` | `trace` + JUnit 取り込み + G3 条件の評価 | Verify |
 | ループ | `mutualspec loop start --title <…> --context <CODE>... [--from-feedback FB-xxxx]` | ループ記録・ブランチを作り、対象モジュールを inWork+1 | Frame |
@@ -111,7 +111,7 @@ result: pending
 | 1 | 指摘あり（error、または warning 上限超過、ゲート不通過） |
 | 2 | 使い方・設定の誤り |
 | 3 | 内部エラー |
-| 4 | 外部依存の不足（s1kd-tools 未導入など。`--allow-missing` で skipped 扱い） |
+| 4 | 外部依存の不足（S1000D の配布物の場所が未指定、`validator: s1kd-tools` で s1kd-tools 未導入など。`--allow-missing` で skipped 扱い） |
 
 ## 5. 規約
 

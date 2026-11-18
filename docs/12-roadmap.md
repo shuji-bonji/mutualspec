@@ -21,7 +21,7 @@ flowchart LR
 | **M3 ループ運用** | 2〜3 週 | `loop start/status/close`、`gate G0〜G4`、`feedback add/triage`、issue 番号の自動更新、md レポート | サンプルの LP-0001 を CLI だけで再現できる |
 | **M4 LLM 連携** | 3〜4 週 | `pack`（4 purpose、予算、ハッシュ）、`apply`（Change Proposal、dry-run、コメント保持）、`mcp`（§4 の tools）、`agents-md`、L5 advisory | 内側ループがエージェント（Cursor / Claude Code など）で回る。評価指標（[09](09-llm-integration.md) §7）を計測 |
 | **M5 実現の支援** | 3 週 | `generate ts`（判断表コード・集約スケルトン・シナリオのテスト雛形）、JUnit 取り込み、`verify`、意味チェックの完全版（適用性、判断点ロール、未使用語、不変条件） | サンプルの src / tests を生成＋実装で再現 |
-| **M6 S1000D プロファイル** | 4 週 | `export s1000d`（procedure → 手順 DM、decision → 記述 DM の表、applic）、s1kd-tools 連携、finding の逆写像、DMC 対応表 | 書き出した DM が s1kd-validate / s1kd-brexcheck（default BREX）で 0 エラー |
+| **M6 S1000D プロファイル** | 4 週 | `export s1000d`（procedure → 手順 DM、decision → 記述 DM の表、applic）、s1000d-core による検証（s1kd-tools は選択肢）、finding の逆写像、DMC 対応表 | 書き出した DM が s1000d-core と s1kd-validate / s1kd-brexcheck の両方（default BREX）で 0 エラー |
 | **v1.0** | — | フォーマット `mutualspec: "1.0"` 固定、`migrate`、ドキュメントサイト、プラグイン API（check / generator / profile）の安定化 | 外部プロジェクト 1 件以上での利用 |
 
 ## 1.0 以降の候補
