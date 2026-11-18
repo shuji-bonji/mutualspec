@@ -14,6 +14,7 @@ refs: [SMC-UAVM-MNT-GLOSSARY-010A]
 
 # プロペラ処置 判断表
 
+> [!NOTE]
 > 閾値はサンプル用の架空値です。
 
 この判断表は MNT が所有し、DOC の手順 `PRC-DOC-PROPELLER-REPLACE#S020` から参照されます（コンテキストマップ REL-PRJ-MNT-DOC）。

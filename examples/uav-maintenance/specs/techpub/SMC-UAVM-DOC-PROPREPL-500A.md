@@ -15,6 +15,7 @@ applicability: { prop: model, in: [QX-4, QX-6] }
 
 # プロペラの点検と交換
 
+> [!NOTE]
 > トルク値はサンプル用の架空値です。
 
 ```yaml specloop:procedure

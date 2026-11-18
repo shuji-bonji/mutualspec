@@ -291,6 +291,7 @@ flowchart LR
 | 状態 | `status` | ✅ | SpecLoop 追加 |
 | トレース | `trace`（derivesFrom, refines, satisfiedBy, verifiedBy, implementedBy, conflictsWith） | — | SpecLoop 追加 |
 
+> [!NOTE]
 > 29148 本文の条項番号・属性の完全な一覧は、規格書（有償）で確認してください。SpecLoop は特性名と属性名だけを参照し、規格本文は同梱しません。
 
 文型は任意で EARS（Easy Approach to Requirements Syntax）のパターン名を `pattern` に記録できます（ubiquitous / event-driven / state-driven / unwanted-behaviour / optional-feature / complex）。
