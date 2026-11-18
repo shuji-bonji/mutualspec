@@ -109,5 +109,5 @@ flowchart TB
 | P8 | **Explain every violation** | 違反は「どこが・何に・なぜ」を必ず返す（ルールの `use` と `rationale`） | 会話第 5 回「違反箇所と、なぜ問題かを示す」 |
 | P9 | **Loops are recorded** | 1 ループ = 1 ブランチ + 1 ループ記録。ゲートの証跡・LLM に渡した Context Pack のハッシュを残す | 会話第 5 回「Git のブランチや CI のジョブとして可視化」 |
 | P10 | **Compose, don't reinvent** | 既存の標準と OSS を組み合わせ、自作は継ぎ目（ルールエンジン・Spec Graph・Pack・CLI）に限る | 会話第 5 回 |
-| P11 | **Small core, optional profiles** | コアはドメイン非依存。S1000D はプロファイルとして足す | 会話第 2 回「サブセットだけ抽出」 |
+| P11 | **Small core, optional profiles** | 中核は形式・識別子・ルール評価・ゲートだけ。それ以外はプラグイン（[ADR-0017](adr/0017-core-and-plugins.md)）。S1000D はプロファイル | 会話第 2 回「サブセットだけ抽出」 |
 | P12 | **Japanese-first, bilingual-ready** | 日本語の正本を一級に扱い（語境界のない言語での語彙検査など）、英訳を並記できる | 利用者の主言語 |

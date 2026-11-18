@@ -1,6 +1,6 @@
 # ADR-0015: フレームワーク名を SpecLoop から MutualSpec に変更し、名前空間を揃える
 
-- 状態: Accepted
+- 状態: Accepted（コアパッケージの中身は [ADR-0017](0017-core-and-plugins.md) で改訂）
 - 日付: 2026-11-19
 - 改訂対象: [ADR-0001](0001-naming.md)（フレームワーク名の部分）、[ADR-0005](0005-msrx-rule-model.md)（ルールモデルの名前）、[ADR-0011](0011-implementation-stack.md)（パッケージ名・CLI 名）
 
@@ -29,7 +29,7 @@ npm 名・CLI 名・スキーマ `$id` のどれも衝突なしには取れず�
 | 役割 | npm 名 | 備考 |
 |---|---|---|
 | CLI（入口） | `mutualspec`（スコープなし） | bin も `mutualspec`。`npx mutualspec …` で呼ぶ |
-| コア | `@shuji-bonji/mutualspec-core` | Parser・Graph・Rule Engine・Pack・Apply・Render |
+| コア | `@shuji-bonji/mutualspec-core` | Parser・Graph・Rule Engine・識別子・ゲート。Pack・Apply・Render はプラグイン（[ADR-0017](0017-core-and-plugins.md)） |
 | MCP サーバー | `@shuji-bonji/mutualspec-mcp` | |
 | スキーマ | `@shuji-bonji/mutualspec-schemas` | |
 | 既定ルール | `@shuji-bonji/mutualspec-rules-core` | |

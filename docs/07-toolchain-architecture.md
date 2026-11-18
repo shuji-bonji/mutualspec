@@ -7,6 +7,9 @@
 - **再利用**: パース（remark / yaml）、スキーマ検証（Ajv）、図（Mermaid）、報告（SARIF）、LLM 接続（MCP）、S1000D 検証（s1000d-stack の s1000d-core。s1kd-tools も選べる）、版管理と CI（Git / GitHub Actions）。
 - **自作**: Spec Graph の構築、MSRX ルールエンジンと組込みチェック、Context Pack 生成、Change Proposal の適用器、ビュー・スケルトン生成器、CLI、S1000D 書き出し器（写像部分のみ）。
 
+> [!NOTE]
+> 自作のうち中核に置くのは、形式・識別子・ルール評価・ゲートだけです（[ADR-0017](adr/0017-core-and-plugins.md)）。Context Pack、適用器、ビュー、MCP、生成器、S1000D 写像はプラグインです。
+
 ## 2. コンポーネント構成
 
 ```mermaid
@@ -19,10 +22,11 @@ flowchart TB
   subgraph MUTUALSPEC["MutualSpec（npm モノレポ）"]
     CLI["mutualspec<br/>mutualspec コマンド"]
     MCP["@shuji-bonji/mutualspec-mcp<br/>MCP サーバー"]
-    CORE["@shuji-bonji/mutualspec-core<br/>Parser・Graph・Rule Engine<br/>Pack・Apply・Render"]
+    CORE["@shuji-bonji/mutualspec-core<br/>Parser・Graph・Rule Engine<br/>識別子・ゲート"]
+    LLM["LLM 連携（プラグイン）<br/>Pack・Apply"]
     RULES["@shuji-bonji/mutualspec-rules-core<br/>既定 MSRX・レキシコン ja/en"]
     SCHEMAS["@shuji-bonji/mutualspec-schemas<br/>JSON Schema 一式"]
-    GEN["@shuji-bonji/mutualspec-generator-ts<br/>スケルトン・判断表コード"]
+    GEN["@shuji-bonji/mutualspec-generator-ts<br/>スケルトン・判断表コード・ビュー"]
     S1K["@shuji-bonji/mutualspec-profile-s1000d<br/>DM 書き出し・検証連携"]
   end
   subgraph REUSED["再利用する OSS / 標準"]
@@ -41,15 +45,18 @@ flowchart TB
   A --> CLI
   CI --> CLI
   CLI --> CORE
+  CLI --> LLM
   MCP --> CORE
+  MCP --> LLM
+  LLM --> CORE
   CORE --> RULES
   CORE --> SCHEMAS
   CLI --> GEN
   CLI --> S1K
+  GEN --> MM
   CORE --> REMARK
   CORE --> AJV
   CORE --> JP
-  CORE --> MM
   CORE --> SARIF
   MCP --> MCPSDK
   S1K --> S1STACK
@@ -58,31 +65,31 @@ flowchart TB
 ```
 
 > [!NOTE]
-> 図中のパッケージ名と `mutualspec` コマンドは確定した名前です（[ADR-0015](adr/0015-rename-to-mutualspec.md)）。入口の CLI パッケージだけをスコープなしの `mutualspec` にし、ライブラリは `@shuji-bonji/mutualspec-*` に置きます。
+> 図中のパッケージ名と `mutualspec` コマンドは確定した名前です（[ADR-0015](adr/0015-rename-to-mutualspec.md)）。入口の CLI パッケージだけをスコープなしの `mutualspec` にし、ライブラリは `@shuji-bonji/mutualspec-*` に置きます。中核とプラグインの中身の線引きは [ADR-0017](adr/0017-core-and-plugins.md) です。
 
 ### 2.1 core パッケージの内部
+
+中核が持つのは、形式を読んで評価し、ゲートを記録するところまでです。Pack、適用、描画、トレースはプラグインです（[ADR-0017](adr/0017-core-and-plugins.md)）。
 
 ```mermaid
 flowchart LR
   P["Parser<br/>front matter・ブロック・本文<br/>（行番号つき）"] --> B["Graph Builder<br/>要素・エッジ・越境判定"]
   B --> E["Rule Engine<br/>MSRX 解決（extends/overrides）<br/>structure / vocabulary / reference<br/>semantic / quality"]
   E --> R["Reporter<br/>text / json / sarif / md"]
-  B --> PK["Pack Builder<br/>範囲抽出・正規化・ハッシュ"]
-  B --> RD["Renderer<br/>Mermaid ビュー・トレース行列"]
-  AP["Proposal Applier<br/>Change Proposal → ファイル<br/>（決定的・コメント保持）"] --> P
-  B --> TR["Trace<br/>注釈スキャン・JUnit 取込"]
+  B --> G["Gate<br/>G0〜G4 とループ記録"]
 ```
 
-| モジュール | 責務 | 主な依存 |
-|---|---|---|
-| Parser | Markdown を front matter・規範ブロック・本文・Mermaid に分解。すべての要素に元ファイルの行番号を付ける | remark-parse, remark-frontmatter, remark-gfm, yaml（LineCounter で位置を取得） |
-| Graph Builder | 要素の正規化、ID 索引、エッジ（trace / term / guard / emits / references）の構築、越境フラグ | — |
-| Rule Engine | ルールセットの解決（階層・上書き・禁止された緩和の拒否）、ルール評価、severity 調整 | Ajv（L0）、JSONPath（L1） |
-| Reporter | 指摘の集約・重複除去・並べ替え・出力 | SARIF 2.1.0 |
-| Pack Builder | 目的別に Graph の部分集合を取り出し、決定的な順序で Markdown + JSON にする | — |
-| Proposal Applier | Change Proposal を検証してから YAML ブロックへ適用。YAML のコメントと書式を保持 | yaml（Document API） |
-| Renderer | 生成ビュー（Mermaid）の生成と差分検査、トレース行列 | — |
-| Trace | `@mutualspec` 注釈のスキャン、JUnit XML の取り込み、カバレッジ計算 | — |
+| モジュール | 配置 | 責務 | 主な依存 |
+|---|---|---|---|
+| Parser | 中核 | Markdown を front matter・規範ブロック・本文に分解。すべての要素に元ファイルの行番号を付ける | remark-parse, remark-frontmatter, remark-gfm, yaml（LineCounter で位置を取得） |
+| Graph Builder | 中核 | 要素の正規化、ID 索引、エッジ（trace / term / guard / emits / references）の構築、越境フラグ | — |
+| Rule Engine | 中核 | ルールセットの解決（階層・上書き・禁止された緩和の拒否）、ルール評価、severity 調整 | Ajv（L0）、JSONPath（L1） |
+| Reporter | 中核 | 指摘の集約・重複除去・並べ替え・出力 | SARIF 2.1.0 |
+| Gate | 中核 | G0〜G4 の機械条件と、ループ記録への承認の記録 | ループ状態のファイル |
+| Pack Builder | プラグイン（generator） | 目的別に Graph の部分集合を取り出し、決定的な順序で Markdown + JSON にする | 中核の Graph |
+| Proposal Applier | プラグイン（generator） | Change Proposal を検証してから YAML ブロックへ適用。YAML のコメントと書式を保持。合否は中核の validate | yaml（Document API） |
+| Renderer | プラグイン（generator） | 生成ビュー（Mermaid）の生成と差分検査 | Mermaid |
+| Trace | プラグイン（check） | `@mutualspec` 注釈のスキャン、JUnit XML の取り込み、カバレッジ計算。ゲートは結果だけを見る | — |
 
 ## 3. 再利用するもの / 作るもの
 
@@ -120,7 +127,7 @@ flowchart LR
 ## 4. 実装スタック
 
 - 言語・実行環境: TypeScript / Node.js（現行の LTS）。配布は npm。理由と、一部役割の後からの書き換えを許すガードレールは [ADR-0011](adr/0011-implementation-stack.md)（Accepted）。
-- パッケージ構成（モノレポ）: `core`, `cli`, `mcp`, `schemas`, `rules-core`, `generator-ts`, `profile-s1000d`。npm 名は [ADR-0015](adr/0015-rename-to-mutualspec.md) で確定した。
+- パッケージ構成（モノレポ）: `core`, `cli`, `mcp`, `schemas`, `rules-core`, `generator-ts`, `profile-s1000d`。npm 名は [ADR-0015](adr/0015-rename-to-mutualspec.md) で確定した。`core` に残すものとプラグインに出すものは [ADR-0017](adr/0017-core-and-plugins.md)。
   - CLI（入口）: スコープなしの `mutualspec`。bin も `mutualspec`（`npx mutualspec …`）。短い別名 `mspec` は npm の既存パッケージ `mspec` が同名の bin を持つため設けない。
   - ライブラリ: `@shuji-bonji/mutualspec-core`、`-mcp`、`-schemas`、`-rules-core`、`-generator-ts`、`-profile-s1000d`。
   - スキーマ `$id`: `https://shuji-bonji.github.io/mutualspec/schemas/0.1/…`（リポジトリ `shuji-bonji/mutualspec` の GitHub Pages）。リポジトリ名に依存するため、改名時の移し方は [ADR-0015](adr/0015-rename-to-mutualspec.md) に従う。

@@ -18,5 +18,6 @@ MutualSpec の主要な決定の記録です。形式: 状況 → 決定 → 検
 | [0012](0012-s1000d-as-profile.md) | S1000D はコアではなくプロファイル | Accepted（検証器の部分は 0016 で改訂） |
 | [0013](0013-sarif-reporting.md) | 検証結果の形式: finding（JSON）と SARIF 2.1.0 | Accepted |
 | [0014](0014-quality-by-29148.md) | 要求品質の基準は ISO/IEC/IEEE 29148、文型は EARS を任意で | Accepted |
-| [0015](0015-rename-to-mutualspec.md) | フレームワーク名を SpecLoop から MutualSpec に変更し、名前空間（npm・CLI・`$id`・識別子）を揃える | Accepted |
+| [0015](0015-rename-to-mutualspec.md) | フレームワーク名を SpecLoop から MutualSpec に変更し、名前空間（npm・CLI・`$id`・識別子）を揃える | Accepted（コアパッケージの中身は 0017 で改訂） |
 | [0016](0016-s1000d-stack-as-default-validator.md) | S1000D の既定の検証器を s1000d-stack にし、s1kd-tools を選択肢として残す | Accepted |
+| [0017](0017-core-and-plugins.md) | 中核の範囲とプラグインの線引き | Accepted |

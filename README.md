@@ -72,7 +72,7 @@ flowchart LR
 | 13 | [docs/13-open-questions-and-risks.md](docs/13-open-questions-and-risks.md) | 未決事項、解決済みの問い（Q-08 名前衝突調査と MutualSpec への改名を含む）、リスク、前提として置いた仮定 |
 | 14 | [docs/14-future-ingest-and-projection.md](docs/14-future-ingest-and-projection.md) | 将来の拡張候補：取り込みと投影（正本と投影の分離）。未採用。MVP / v1.0 の範囲外 |
 | 15 | [docs/15-future-agent-orchestration.md](docs/15-future-agent-orchestration.md) | 将来の拡張候補：エージェント編成（agentchattr / LangChain / LangGraph / LangSmith）。未採用。MVP / v1.0 の範囲外 |
-| ADR | [docs/adr/](docs/adr/README.md) | 決定記録（命名、正本形式、ID 体系、ルールモデル、ゲート、MutualSpec への改名、S1000D の検証器など 16 件） |
+| ADR | [docs/adr/](docs/adr/README.md) | 決定記録（命名、正本形式、ID 体系、ルールモデル、ゲート、MutualSpec への改名、S1000D の検証器、中核とプラグインの線引きなど 17 件） |
 
 ## リポジトリ構成
 
