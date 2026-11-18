@@ -1,0 +1,18 @@
+id: FB-0001
+source: field
+observedAt: "2026-11-11"
+reporter: "@inspector"
+contexts: [MNT, DOC]
+judgementRef: JDG-MNT-0001
+summary: 欠け深さ 0.5〜1.0 mm の判断 7 件のうち、欠けが前縁の外側 1/3 にあった 5 件はすべて replace と判断された。
+detail: |
+  JDG-MNT-0001 の判断記録（7 件）を集計した。欠けの位置が前縁の外側 1/3 の場合は全件 replace、
+  それ以外は 2 件とも reuse だった。位置を入力に加えれば、この範囲の大半を判断表で決められる。
+evidence: [作業指示 WO-2026-0112〜0118 の inspectorJudgement]
+affects: [DEC-MNT-PROP-DISPOSITION, VO-MNT-PROPELLER-INSPECTION, PRC-DOC-PROPELLER-REPLACE]
+proposedAction: "判断表の入力に「欠け位置（outerThird: boolean）」を追加し、R03 を分割する。判断点は位置不明の場合だけに残す。"
+triage:
+  status: accepted
+  decidedBy: "@domain-owner"
+  decidedAt: "2026-11-12"
+  loop: LP-0002

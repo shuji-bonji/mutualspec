@@ -1,0 +1,20 @@
+{
+  "name": "specloop-design",
+  "private": true,
+  "type": "module",
+  "description": "SpecLoop 設計パッケージ（設計文書・スキーマ・サンプル）。整合性チェックのみを含む",
+  "scripts": {
+    "check": "node scripts/check-design.mjs",
+    "check:mermaid": "node scripts/check-mermaid.mjs"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^11.0.0",
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.0",
+    "yaml": "^2.5.0",
+    "jsonpath-plus": "^10.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

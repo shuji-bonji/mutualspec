@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/specloop.config.schema.json",
+  "title": "specloop.yaml",
+  "type": "object",
+  "required": ["specloop", "project", "specRoot", "rules"],
+  "properties": {
+    "specloop": { "const": "0.1" },
+    "project": {
+      "type": "object",
+      "required": ["code", "name", "language"],
+      "properties": {
+        "code": { "$ref": "common.schema.json#/$defs/projectCode" },
+        "name": { "type": "string" },
+        "language": { "type": "string", "description": "正本の主言語" },
+        "languages": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "specRoot": { "type": "string", "default": "specs" },
+    "rules": {
+      "type": "object",
+      "required": ["project"],
+      "properties": {
+        "core": { "enum": ["builtin", "none"], "default": "builtin" },
+        "organization": { "type": "array", "items": { "type": "string" }, "description": "組織ルール（パッケージ名またはパス）" },
+        "project": { "$ref": "common.schema.json#/$defs/smc" },
+        "lexicons": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "loop": {
+      "type": "object",
+      "properties": {
+        "dir": { "type": "string", "default": "loops" },
+        "feedbackDir": { "type": "string", "default": "feedback" },
+        "innerLoopMaxIterations": { "type": "integer", "minimum": 1, "maximum": 10, "default": 3 },
+        "branchPrefix": { "type": "string", "default": "loop/" },
+        "gates": {
+          "type": "object",
+          "patternProperties": {
+            "^G[0-4]$": {
+              "type": "object",
+              "properties": {
+                "humanApproval": { "type": "boolean" },
+                "maxErrors": { "type": "integer", "minimum": 0 },
+                "maxWarnings": { "type": ["integer", "null"], "minimum": 0 },
+                "requireTraceCoverage": { "type": "number", "minimum": 0, "maximum": 1 }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "trace": {
+      "type": "object",
+      "properties": {
+        "codeRoots": { "type": "array", "items": { "type": "string" } },
+        "annotation": { "type": "string", "default": "@specloop" },
+        "testReports": { "type": "array", "items": { "type": "string" }, "description": "JUnit XML のパス/glob" }
+      },
+      "additionalProperties": false
+    },
+    "llm": {
+      "type": "object",
+      "properties": {
+        "packBudgetTokens": { "type": "integer", "minimum": 1000 },
+        "outputContract": { "enum": ["change-proposal", "direct-edit"], "default": "change-proposal" },
+        "advisoryReview": { "type": "boolean", "default": false }
+      },
+      "additionalProperties": false
+    },
+    "profiles": {
+      "type": "object",
+      "properties": {
+        "s1000d": {
+          "type": "object",
+          "required": ["modelIdentCode", "issue"],
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "modelIdentCode": { "type": "string", "pattern": "^[A-Z0-9]{2,14}$" },
+            "issue": { "enum": ["4.2", "5.0", "6", "7"] },
+            "brex": { "type": "string", "description": "プロジェクト BREX の DMC（またはファイルパス）" },
+            "csdbDir": { "type": "string" },
+            "validator": { "enum": ["s1kd-tools", "s1000d-stack-mcp"], "default": "s1kd-tools" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "formats": { "type": "array", "items": { "enum": ["text", "json", "sarif", "md"] } },
+        "dir": { "type": "string", "default": ".specloop/reports" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/graph.schema.json",
+  "title": "Spec Graph IR (.specloop/build/graph.json) — 全モジュールを正規化した中間表現。ルールはこれに対して評価される",
+  "type": "object",
+  "required": ["specloop", "project", "builtAt", "sourceHash", "modules", "elements", "edges"],
+  "properties": {
+    "specloop": { "const": "0.1" },
+    "project": { "type": "object", "required": ["code"], "properties": { "code": { "type": "string" }, "name": { "type": "string" } } },
+    "builtAt": { "type": "string", "format": "date-time" },
+    "sourceHash": { "type": "string", "description": "全ソースの sha256（再現性）" },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["smc", "kind", "context", "file", "issue", "status"],
+        "properties": {
+          "smc": { "type": "string" }, "kind": { "type": "string" }, "context": { "type": "string" },
+          "file": { "type": "string" }, "issue": { "type": "string" }, "status": { "type": "string" },
+          "title": {}, "summary": { "type": "string" },
+          "prose": { "type": "array", "items": { "type": "object", "properties": { "heading": { "type": "string" }, "text": { "type": "string" }, "line": { "type": "integer" } } } }
+        }
+      }
+    },
+    "elements": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "type", "context", "module", "source"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "enum": ["context", "relation", "term", "requirement", "aggregate", "entity", "valueObject", "invariant", "command", "event", "policy", "stateMachine", "decision", "judgement", "procedure", "step", "scenario", "interface", "rule"] },
+          "context": { "type": "string" },
+          "module": { "type": "string" },
+          "source": { "type": "object", "required": ["file", "line"], "properties": { "file": { "type": "string" }, "line": { "type": "integer" } } },
+          "data": { "type": "object", "description": "ブロック内の元データ（正規化済み）" }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["from", "to", "type"],
+        "properties": {
+          "from": { "type": "string" }, "to": { "type": "string" },
+          "type": { "enum": ["derivesFrom", "refines", "satisfiedBy", "verifiedBy", "implementedBy", "conflictsWith", "usesTerm", "contains", "guards", "emits", "triggers", "references", "dependsOn", "upstreamOf"] },
+          "crossContext": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

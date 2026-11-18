@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/llm/change-proposal.schema.json",
+  "title": "Change Proposal — LLM の構造化出力契約。LLM はファイルを直接書かず、この形で提案し、specloop apply が決定的に書き込む",
+  "type": "object",
+  "required": ["loop", "context", "inScope", "operations", "termsUsed", "openQuestions"],
+  "properties": {
+    "loop": { "type": "string", "pattern": "^LP-[0-9]{4}$" },
+    "context": { "type": "string" },
+    "inScope": { "type": "boolean", "description": "依頼が context の charter 範囲内か。false の場合 operations は空で outOfScopeReason 必須" },
+    "outOfScopeReason": { "type": "string" },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["op", "smc", "rationale"],
+        "properties": {
+          "op": { "enum": ["add-element", "replace-element", "remove-element", "set-field", "add-module", "edit-prose"] },
+          "smc": { "type": "string" },
+          "block": { "type": "string", "description": "specloop:<block> 名" },
+          "elementId": { "type": "string" },
+          "field": { "type": "string" },
+          "value": { "description": "追加・置換する値（ブロックスキーマに適合すること）" },
+          "prose": { "type": "object", "properties": { "heading": { "type": "string" }, "markdown": { "type": "string" } }, "additionalProperties": false },
+          "rationale": { "type": "string" },
+          "addresses": { "type": "array", "items": { "type": "string" }, "description": "対応する finding の ruleId@elementId や FB-xxxx" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "termsUsed": { "type": "array", "items": { "type": "string", "pattern": "^TERM-" }, "description": "使用した用語 ID。未定義語を使う場合は newTerms に提案" },
+    "newTerms": { "type": "array", "items": { "$ref": "../blocks/glossary.schema.json#/properties/terms/items" } },
+    "openQuestions": { "type": "array", "items": { "type": "string" }, "description": "人の判断が必要な点（推測で埋めない）" }
+  },
+  "additionalProperties": false
+}

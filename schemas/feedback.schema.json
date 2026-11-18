@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/feedback.schema.json",
+  "title": "Feedback Item (feedback/FB-xxxx.yaml)",
+  "type": "object",
+  "required": ["id", "source", "observedAt", "contexts", "summary", "triage"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^FB-[0-9]{4}$" },
+    "source": { "enum": ["field", "implementation", "test", "review", "llm", "incident", "standard"] },
+    "observedAt": { "type": "string", "format": "date" },
+    "reporter": { "type": "string" },
+    "contexts": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/contextCode" } },
+    "summary": { "type": "string" },
+    "detail": { "type": "string" },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "judgementRef": { "type": "string", "pattern": "^JDG-", "description": "判断点の記録から生まれた場合" },
+    "affects": { "$ref": "common.schema.json#/$defs/refList" },
+    "proposedAction": { "type": "string" },
+    "triage": {
+      "type": "object", "required": ["status"],
+      "properties": {
+        "status": { "enum": ["new", "accepted", "rejected", "deferred", "done"] },
+        "decidedBy": { "type": "string" },
+        "decidedAt": { "type": "string", "format": "date" },
+        "loop": { "type": "string", "pattern": "^LP-[0-9]{4}$" },
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

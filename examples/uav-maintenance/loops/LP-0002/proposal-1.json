@@ -1,0 +1,48 @@
+{
+  "loop": "LP-0002",
+  "context": "MNT",
+  "inScope": true,
+  "operations": [
+    {
+      "op": "add-element",
+      "smc": "SMC-UAVM-MNT-GLOSSARY-010A",
+      "block": "glossary",
+      "elementId": "TERM-MNT-CHIP-OUTER-THIRD",
+      "value": {
+        "id": "TERM-MNT-CHIP-OUTER-THIRD",
+        "term": "外側三分の一の欠け",
+        "translations": { "en": "chip in outer third" },
+        "code": "chipInOuterThird",
+        "category": "concept",
+        "visibility": "published",
+        "definition": "欠けの位置が、プロペラ前縁を翼端側から 3 等分したときの最も外側の区間にあること。"
+      },
+      "rationale": "FB-0001 で判断を分けた要因を、判断表の入力として名前を付けるため。",
+      "addresses": ["FB-0001"]
+    },
+    {
+      "op": "replace-element",
+      "smc": "SMC-UAVM-MNT-PROPDISP-310A",
+      "block": "decision",
+      "elementId": "DEC-MNT-PROP-DISPOSITION",
+      "field": "rules",
+      "value": [
+        { "id": "R01", "when": { "crackFound": true, "chipDepthMm": "-", "chipInOuterThird": "-" }, "then": { "disposition": "replace" } },
+        { "id": "R02", "when": { "crackFound": false, "chipDepthMm": "< 0.5", "chipInOuterThird": "-" }, "then": { "disposition": "reuse" } },
+        { "id": "R03", "when": { "crackFound": false, "chipDepthMm": "[0.5..1.0)", "chipInOuterThird": "yes" }, "then": { "disposition": "replace" }, "rationale": "FB-0001: 外側三分の一の欠けは 5 件すべて replace と判断された。", "source": ["FB-0001"] },
+        { "id": "R04", "when": { "crackFound": false, "chipDepthMm": "[0.5..1.0)", "chipInOuterThird": "no" }, "then": { "disposition": "reuse" }, "rationale": "FB-0001: それ以外の位置は 2 件とも reuse と判断された。", "source": ["FB-0001"] },
+        { "id": "R05", "when": { "crackFound": false, "chipDepthMm": "[0.5..1.0)", "chipInOuterThird": "unknown" }, "then": { "disposition": "escalate" },
+          "judgement": { "id": "JDG-MNT-0001", "by": "Inspector", "criteria": "欠けの位置を特定できない場合に限り、形状を確認して reuse か replace を決め、理由を記録する。", "escalateTo": "MaintenanceManager", "record": true } },
+        { "id": "R06", "when": { "crackFound": false, "chipDepthMm": ">= 1.0", "chipInOuterThird": "-" }, "then": { "disposition": "replace" } }
+      ],
+      "rationale": "R03 を位置で 3 分割し、判断点 JDG-MNT-0001 を位置不明の場合だけに縮める。",
+      "addresses": ["FB-0001"]
+    }
+  ],
+  "termsUsed": ["TERM-MNT-CRACK", "TERM-MNT-CHIP-DEPTH", "TERM-MNT-PROPELLER-DISPOSITION", "TERM-MNT-CHIP-OUTER-THIRD"],
+  "openQuestions": [
+    "判断表の inputs に chipInOuterThird（enum: yes / no / unknown）を追加する操作が提案に含まれていない。inputs の変更も同じ提案に含めるべきか、人が判断してほしい。",
+    "R04（位置が外側三分の一以外で reuse）は 2 件の実績に基づく。件数が少ないため、採用前に検査員の確認が必要。",
+    "DOC の手順 PRC-DOC-PROPELLER-REPLACE#S020 に、欠け位置の記録を追加する必要がある（DOC コンテキストの変更。本提案の範囲外）。"
+  ]
+}

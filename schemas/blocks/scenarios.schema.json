@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/blocks/scenarios.schema.json",
+  "title": "specloop:scenarios — 受け入れシナリオ（Given/When/Then）",
+  "type": "object",
+  "required": ["scenarios"],
+  "properties": {
+    "scenarios": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["id", "title", "verifies", "given", "when", "then"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^SCN-[A-Z][A-Z0-9]{1,7}-[0-9]{4}$" },
+          "title": { "type": "string" },
+          "verifies": { "$ref": "../common.schema.json#/$defs/refList" },
+          "given": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "when": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "then": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "examples": { "type": "array", "items": { "type": "object" } },
+          "automation": {
+            "type": "object",
+            "properties": {
+              "test": { "$ref": "../common.schema.json#/$defs/codeRef" },
+              "manual": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

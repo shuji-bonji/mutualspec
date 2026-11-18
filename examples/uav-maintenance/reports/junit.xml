@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="6" failures="0" errors="0" time="0.004112615">
+    <testsuite name="tests/workorder.spec.ts" timestamp="2026-11-08T00:58:12.000Z" hostname="ci" tests="6" failures="0" errors="0" skipped="0" time="0.004112615">
+        <testcase classname="tests/workorder.spec.ts" name="AGG-MNT-WORK-ORDER &gt; SCN-MNT-0001 承認前の作業指示には着手できない" time="0.001848886">
+        </testcase>
+        <testcase classname="tests/workorder.spec.ts" name="AGG-MNT-WORK-ORDER &gt; SCN-MNT-0002 crack=true depth=0.2 → replace" time="0.000298838">
+        </testcase>
+        <testcase classname="tests/workorder.spec.ts" name="AGG-MNT-WORK-ORDER &gt; SCN-MNT-0002 crack=false depth=0.2 → reuse" time="0.000174623">
+        </testcase>
+        <testcase classname="tests/workorder.spec.ts" name="AGG-MNT-WORK-ORDER &gt; SCN-MNT-0002 crack=false depth=0.7 → escalate" time="0.000148584">
+        </testcase>
+        <testcase classname="tests/workorder.spec.ts" name="AGG-MNT-WORK-ORDER &gt; SCN-MNT-0002 crack=false depth=1.2 → replace" time="0.000126858">
+        </testcase>
+        <testcase classname="tests/workorder.spec.ts" name="AGG-MNT-WORK-ORDER &gt; SCN-MNT-0003 点検結果が欠けていると完了できない" time="0.000298418">
+        </testcase>
+    </testsuite>
+</testsuites>

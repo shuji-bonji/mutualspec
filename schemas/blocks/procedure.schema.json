@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/blocks/procedure.schema.json",
+  "title": "specloop:procedure — 手順（S1000D procedural DM に写像可能な最小構造）",
+  "type": "object",
+  "required": ["procedure"],
+  "$defs": {
+    "safety": {
+      "type": "object", "required": ["type", "text"],
+      "properties": {
+        "type": { "enum": ["warning", "caution", "note"] },
+        "text": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "step": {
+      "type": "object", "required": ["id", "text"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^S[0-9]{3}$" },
+        "text": { "type": "string", "minLength": 1 },
+        "safety": { "type": "array", "items": { "$ref": "#/$defs/safety" } },
+        "decision": { "type": "string", "pattern": "^DEC-", "description": "このステップで評価する判断表" },
+        "judgement": { "$ref": "../common.schema.json#/$defs/judgement" },
+        "expected": { "type": "string", "description": "期待結果（確認可能な形）" },
+        "record": { "type": "array", "items": { "type": "string" }, "description": "記録すべき値（model の属性名）" },
+        "applicability": { "$ref": "../common.schema.json#/$defs/applicability" },
+        "satisfies": { "$ref": "../common.schema.json#/$defs/refList" },
+        "steps": { "type": "array", "items": { "$ref": "#/$defs/step" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "procedure": {
+      "type": "object", "required": ["id", "title", "preliminary", "steps"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^PRC-[A-Z][A-Z0-9]{1,7}-[A-Z0-9-]+$" },
+        "title": { "type": "string" },
+        "applicability": { "$ref": "../common.schema.json#/$defs/applicability" },
+        "preliminary": {
+          "type": "object",
+          "properties": {
+            "personnel": { "type": "array", "items": { "type": "string" } },
+            "tools": { "type": "array", "items": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" }, "term": { "type": "string", "pattern": "^TERM-" } }, "additionalProperties": false } },
+            "parts": { "type": "array", "items": { "type": "object", "required": ["term", "qty"], "properties": { "term": { "type": "string", "pattern": "^TERM-" }, "qty": { "type": "integer", "minimum": 1 } }, "additionalProperties": false } },
+            "safety": { "type": "array", "items": { "$ref": "#/$defs/safety" } },
+            "conditions": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        },
+        "steps": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/step" } },
+        "closeout": { "type": "array", "items": { "$ref": "#/$defs/step" } },
+        "s1000d": {
+          "type": "object",
+          "properties": { "infoCode": { "type": "string", "pattern": "^[0-9]{3}$" }, "itemLocationCode": { "type": "string", "pattern": "^[A-DTZ]$" }, "systemCode": { "type": "string" } },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/module.schema.json",
+  "title": "Spec Module front matter",
+  "description": "Spec Module（.md）の YAML front matter。S1000D の identAndStatusSection に相当。",
+  "type": "object",
+  "required": ["specloop", "smc", "kind", "title", "context", "issue", "status", "language", "owner"],
+  "properties": {
+    "specloop": { "const": "0.1", "description": "フォーマット版" },
+    "smc": { "$ref": "common.schema.json#/$defs/smc" },
+    "kind": { "$ref": "common.schema.json#/$defs/kind" },
+    "title": { "$ref": "common.schema.json#/$defs/localizedText" },
+    "summary": { "type": "string", "maxLength": 200, "description": "1 行要約。Context Pack の目次に使う。" },
+    "context": { "$ref": "common.schema.json#/$defs/contextCode" },
+    "issue": { "$ref": "common.schema.json#/$defs/issue" },
+    "status": { "$ref": "common.schema.json#/$defs/status" },
+    "language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$" },
+    "owner": { "type": "string", "minLength": 1 },
+    "rules": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/smc" }, "description": "追加で適用する rules モジュール（S1000D の brexDmRef 相当）。省略時は継承。" },
+    "refs": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/smc" }, "uniqueItems": true, "description": "依存するモジュール" },
+    "applicability": { "$ref": "common.schema.json#/$defs/applicability" },
+    "supersedes": { "$ref": "common.schema.json#/$defs/smc" },
+    "tags": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

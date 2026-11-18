@@ -1,0 +1,16 @@
+id: LP-0002
+title: 欠け位置を判断表の入力に加える（FB-0001）
+contexts: [MNT, DOC]
+trigger:
+  type: feedback
+  refs: [FB-0001]
+goal: 判断点 JDG-MNT-0001 の適用範囲を縮め、判断表で決められる範囲を広げる。
+status: specify
+branch: loop/LP-0002-chip-position
+phases:
+  - { phase: frame, startedAt: "2026-11-13T10:00:00+09:00", endedAt: "2026-11-13T10:40:00+09:00", actors: ["@domain-owner"] }
+  - { phase: specify, startedAt: "2026-11-13T11:00:00+09:00", actors: ["@maintenance-owner", "llm:drafter"] }
+gates:
+  - { gate: G0, result: passed, at: "2026-11-13T10:40:00+09:00", approver: "@domain-owner" }
+  - { gate: G1, result: pending }
+feedbackConsumed: [FB-0001]

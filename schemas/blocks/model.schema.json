@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/blocks/model.schema.json",
+  "title": "specloop:model — DDD 戦術設計（集約・エンティティ・値オブジェクト・不変条件・コマンド・イベント）",
+  "type": "object",
+  "required": ["aggregates"],
+  "$defs": {
+    "attribute": {
+      "type": "object", "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z][A-Za-z0-9]*$" },
+        "type": { "type": "string", "description": "string|integer|number|boolean|date|datetime|enum(a,b)|list<T>|VO-xxx|ENT-xxx|TERM-xxx(published)" },
+        "required": { "type": "boolean", "default": true },
+        "term": { "type": "string", "pattern": "^TERM-" },
+        "unit": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "invariant": {
+      "type": "object", "required": ["id", "statement", "rationale"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^INV-[A-Z][A-Z0-9]{1,7}-[0-9]{4}$" },
+        "statement": { "$ref": "../common.schema.json#/$defs/localizedText" },
+        "rationale": { "$ref": "../common.schema.json#/$defs/localizedText" },
+        "expression": { "type": "string", "description": "任意。検証可能な式（擬似コード可）" },
+        "enforcedBy": { "$ref": "../common.schema.json#/$defs/refList" },
+        "trace": { "$ref": "../common.schema.json#/$defs/traceLinks" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "aggregates": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "term", "root"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^AGG-[A-Z][A-Z0-9]{1,7}-[A-Z0-9-]+$" },
+          "name": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+          "term": { "type": "string", "pattern": "^TERM-" },
+          "description": { "type": "string" },
+          "root": {
+            "type": "object", "required": ["id", "identity", "attributes"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^ENT-" },
+              "identity": { "type": "string" },
+              "attributes": { "type": "array", "items": { "$ref": "#/$defs/attribute" } }
+            },
+            "additionalProperties": false
+          },
+          "entities": {
+            "type": "array",
+            "items": {
+              "type": "object", "required": ["id", "name", "term", "identity", "attributes"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^ENT-" },
+                "name": { "type": "string" }, "term": { "type": "string", "pattern": "^TERM-" },
+                "identity": { "type": "string" },
+                "attributes": { "type": "array", "items": { "$ref": "#/$defs/attribute" } }
+              },
+              "additionalProperties": false
+            }
+          },
+          "valueObjects": {
+            "type": "array",
+            "items": {
+              "type": "object", "required": ["id", "name", "attributes"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^VO-" },
+                "name": { "type": "string" }, "term": { "type": "string", "pattern": "^TERM-" },
+                "attributes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/attribute" } },
+                "constraints": { "type": "array", "items": { "type": "string" } }
+              },
+              "additionalProperties": false
+            }
+          },
+          "invariants": { "type": "array", "items": { "$ref": "#/$defs/invariant" } },
+          "commands": {
+            "type": "array",
+            "items": {
+              "type": "object", "required": ["id", "name", "term"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^CMD-" },
+                "name": { "type": "string", "pattern": "^[a-z][A-Za-z0-9]*$" },
+                "term": { "type": "string", "pattern": "^TERM-" },
+                "actor": { "type": "string" },
+                "parameters": { "type": "array", "items": { "$ref": "#/$defs/attribute" } },
+                "preconditions": { "$ref": "../common.schema.json#/$defs/refList" },
+                "emits": { "$ref": "../common.schema.json#/$defs/refList" },
+                "trace": { "$ref": "../common.schema.json#/$defs/traceLinks" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object", "required": ["id", "name", "term"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^EVT-" },
+                "name": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+                "term": { "type": "string", "pattern": "^TERM-" },
+                "payload": { "type": "array", "items": { "$ref": "#/$defs/attribute" } },
+                "published": { "type": "boolean", "default": false }
+              },
+              "additionalProperties": false
+            }
+          },
+          "behavior": { "type": "string", "pattern": "^BHV-" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "policies": {
+      "type": "array",
+      "description": "イベント → コマンドの反応ルール（When X then Y）",
+      "items": {
+        "type": "object", "required": ["id", "when", "then"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^POL-" },
+          "when": { "type": "string", "pattern": "^EVT-" },
+          "then": { "type": "string", "pattern": "^(CMD|IFC)-" },
+          "decision": { "type": "string", "pattern": "^DEC-" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

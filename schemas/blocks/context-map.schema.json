@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/blocks/context-map.schema.json",
+  "title": "specloop:context-map",
+  "type": "object",
+  "required": ["contexts", "relations"],
+  "properties": {
+    "contexts": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "required": ["code", "name", "type", "path"],
+        "properties": {
+          "code": { "$ref": "../common.schema.json#/$defs/contextCode" },
+          "name": { "type": "string" },
+          "type": { "enum": ["core", "supporting", "generic"] },
+          "path": { "type": "string", "description": "specRoot からの相対ディレクトリ" },
+          "owner": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["id", "upstream", "downstream", "patterns"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^REL-[A-Z][A-Z0-9]{1,7}-[A-Z0-9][A-Z0-9-]*$" },
+          "upstream": { "$ref": "../common.schema.json#/$defs/contextCode" },
+          "downstream": { "$ref": "../common.schema.json#/$defs/contextCode" },
+          "patterns": {
+            "type": "array", "minItems": 1,
+            "items": { "enum": ["partnership", "shared-kernel", "customer-supplier", "conformist", "anticorruption-layer", "open-host-service", "published-language", "separate-ways"] }
+          },
+          "via": { "$ref": "../common.schema.json#/$defs/refList", "description": "境界を越える唯一の経路（IFC / published TERM）" },
+          "translation": { "type": "string", "description": "ACL での変換の説明、または変換表モジュール" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

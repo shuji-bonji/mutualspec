@@ -1,0 +1,361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/blocks/rules.schema.json",
+  "title": "specloop:rules — SLRX (SpecLoop Rules eXchange)。S1000D BREX の構造を Spec Graph に写したもの",
+  "type": "object",
+  "required": [
+    "ruleset"
+  ],
+  "$defs": {
+    "value": {
+      "type": "object",
+      "required": [
+        "form",
+        "allowed"
+      ],
+      "description": "BREX objectValue 相当",
+      "properties": {
+        "form": {
+          "enum": [
+            "single",
+            "range",
+            "pattern"
+          ]
+        },
+        "allowed": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "meaning": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "contexts": {
+          "type": "array",
+          "items": {
+            "$ref": "../common.schema.json#/$defs/contextCode"
+          }
+        },
+        "kinds": {
+          "type": "array",
+          "items": {
+            "$ref": "../common.schema.json#/$defs/kind"
+          }
+        },
+        "elementTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "検査するテキストフィールド。\"prose\" は Markdown 本文"
+        }
+      },
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "use",
+        "severity"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^SLR-[A-Z][A-Z0-9]{1,7}-[0-9]{5}$"
+        },
+        "kind": {
+          "enum": [
+            "structure",
+            "vocabulary",
+            "reference",
+            "semantic",
+            "quality",
+            "narrative",
+            "llm-review"
+          ]
+        },
+        "layer": {
+          "enum": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5"
+          ],
+          "description": "省略時は kind から導出"
+        },
+        "use": {
+          "type": "string",
+          "description": "人と LLM が読む規則文（BREX objectUse 相当）。違反時メッセージにも使う"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning",
+            "info",
+            "advisory"
+          ]
+        },
+        "decisionRef": {
+          "type": "string",
+          "description": "業務ルール決定点への参照（BREX の brDecisionRef 相当）"
+        },
+        "characteristic": {
+          "enum": [
+            "necessary",
+            "appropriate",
+            "unambiguous",
+            "complete",
+            "singular",
+            "feasible",
+            "verifiable",
+            "correct",
+            "conforming"
+          ],
+          "description": "quality ルールが根拠とする 29148 の特性"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "select": {
+          "type": "string",
+          "description": "RFC 9535 JSONPath。Spec Graph に対する対象選択（BREX objectPath 相当）"
+        },
+        "path": {
+          "type": "string",
+          "description": "選択要素からの相対フィールドパス（ドット区切り）"
+        },
+        "flag": {
+          "enum": [
+            0,
+            1,
+            2
+          ],
+          "description": "BREX allowedObjectFlag 相当。0=禁止 1=必須 2=任意(使うなら values に一致)"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        "check": {
+          "type": "string",
+          "description": "組込みチェック名（vocabulary/reference/semantic/quality 用）"
+        },
+        "params": {
+          "type": "object"
+        },
+        "patterns": {
+          "type": "array",
+          "description": "quality/vocabulary 用の語彙パターン",
+          "items": {
+            "type": "object",
+            "required": [
+              "match"
+            ],
+            "properties": {
+              "match": {
+                "type": "string"
+              },
+              "regex": {
+                "type": "boolean",
+                "default": false
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "prompt": {
+          "type": "string",
+          "description": "llm-review 用の観点（判定ではなく助言を求める）"
+        },
+        "since": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "structure"
+              }
+            }
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": [
+                  "select",
+                  "flag"
+                ]
+              },
+              {
+                "required": [
+                  "check"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "vocabulary",
+                  "reference",
+                  "semantic"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "check"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "quality"
+              }
+            }
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": [
+                  "check"
+                ]
+              },
+              {
+                "required": [
+                  "patterns"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "llm-review"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "prompt"
+            ],
+            "properties": {
+              "severity": {
+                "const": "advisory"
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "ruleset": {
+      "type": "object",
+      "required": [
+        "id",
+        "layer",
+        "rules"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ルールセット ID（モジュールの SMC と同一）"
+        },
+        "layer": {
+          "enum": [
+            "core",
+            "organization",
+            "project",
+            "context"
+          ]
+        },
+        "extends": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "上位ルールセット。下位は上位を緩められず、狭めるだけ（BREX layering と同じ）"
+        },
+        "overrides": {
+          "type": "array",
+          "description": "上位ルールの severity を引き上げる、または無効化する。core / organization 層の error ルールは無効化・格下げ不可（validator が拒否）。無効化には reason 必須",
+          "items": {
+            "type": "object",
+            "required": [
+              "rule",
+              "reason"
+            ],
+            "properties": {
+              "rule": {
+                "type": "string",
+                "pattern": "^SLR-"
+              },
+              "severity": {
+                "enum": [
+                  "error",
+                  "warning",
+                  "info"
+                ]
+              },
+              "disable": {
+                "type": "boolean"
+              },
+              "reason": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

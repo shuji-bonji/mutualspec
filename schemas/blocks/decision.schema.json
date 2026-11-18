@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/blocks/decision.schema.json",
+  "title": "specloop:decision — 判断表（DMN の decision table を簡略化）",
+  "type": "object",
+  "required": ["decisions"],
+  "properties": {
+    "decisions": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "hitPolicy", "inputs", "outputs", "rules"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^DEC-[A-Z][A-Z0-9]{1,7}-[A-Z0-9-]+$" },
+          "question": { "$ref": "../common.schema.json#/$defs/localizedText" },
+          "hitPolicy": { "enum": ["unique", "first"], "description": "unique: 必ず 1 行だけ一致 / first: 上から最初の一致" },
+          "inputs": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object", "required": ["name", "type"],
+              "properties": {
+                "name": { "type": "string", "pattern": "^[a-z][A-Za-z0-9]*$" },
+                "type": { "enum": ["boolean", "number", "integer", "string", "enum"] },
+                "values": { "type": "array", "items": { "type": "string" } },
+                "unit": { "type": "string" },
+                "term": { "type": "string", "pattern": "^TERM-" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "outputs": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object", "required": ["name", "type"],
+              "properties": {
+                "name": { "type": "string", "pattern": "^[a-z][A-Za-z0-9]*$" },
+                "type": { "enum": ["boolean", "number", "string", "enum"] },
+                "values": { "type": "array", "items": { "type": "string" } },
+                "term": { "type": "string", "pattern": "^TERM-" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "rules": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object", "required": ["id", "when", "then"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^R[0-9]{2}$" },
+                "when": {
+                  "type": "object",
+                  "description": "入力名 → 単項テスト。\"-\"=任意, true/false, \"< 0.5\", \">= 0.5\", \"[0.5..1.0)\", \"a|b\"",
+                  "additionalProperties": { "type": ["string", "number", "boolean"] }
+                },
+                "then": { "type": "object", "additionalProperties": { "type": ["string", "number", "boolean"] } },
+                "rationale": { "type": "string" },
+                "judgement": { "$ref": "../common.schema.json#/$defs/judgement" },
+                "source": { "type": "array", "items": { "type": "string" } }
+              },
+              "additionalProperties": false
+            }
+          },
+          "trace": { "$ref": "../common.schema.json#/$defs/traceLinks" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

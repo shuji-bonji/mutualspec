@@ -1,0 +1,40 @@
+# SpecLoop CI の例（設計。specloop CLI 実装後に動作する）
+name: specloop
+on:
+  pull_request:
+    paths: ["specs/**", "loops/**", "feedback/**", "src/**", "tests/**", "specloop.yaml"]
+permissions:
+  contents: read
+  security-events: write   # SARIF のアップロード
+jobs:
+  spec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: lts/* }
+      - run: npm ci
+      - name: Validate specs (L0-L4)
+        run: npx specloop validate --format text,sarif --out .specloop/reports
+      - name: Generated views are up to date
+        run: npx specloop render --check
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with: { sarif_file: .specloop/reports/specloop.sarif }
+      - name: Gate G1 (machine conditions)
+        run: npx specloop gate G1 --loop "$(npx specloop loop current)"
+  realize:
+    needs: spec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: lts/* }
+      - run: npm ci
+      - run: npx specloop generate --check
+      - run: npx vitest run --reporter=junit --outputFile=reports/junit.xml
+      - name: Gate G2/G3 (build, trace coverage)
+        run: |
+          npx specloop gate G2 --loop "$(npx specloop loop current)"
+          npx specloop trace --format md --out .specloop/reports/trace.md
+          npx specloop gate G3 --loop "$(npx specloop loop current)"

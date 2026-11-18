@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/finding.schema.json",
+  "title": "Validation Finding（specloop validate --format json の 1 件）。SARIF 2.1.0 の result に 1:1 で写像",
+  "type": "object",
+  "required": ["ruleId", "layer", "severity", "message", "location"],
+  "properties": {
+    "ruleId": { "type": "string", "description": "SLR-xxx または SCHEMA (L0)" },
+    "layer": { "enum": ["L0", "L1", "L2", "L3", "L4", "L5"] },
+    "severity": { "enum": ["error", "warning", "info", "advisory"] },
+    "message": { "type": "string", "description": "具体的な違反内容" },
+    "use": { "type": "string", "description": "違反したルールの規則文（なぜ問題か）" },
+    "characteristic": { "type": "string" },
+    "location": {
+      "type": "object", "required": ["file"],
+      "properties": {
+        "file": { "type": "string" },
+        "line": { "type": "integer", "minimum": 1 },
+        "column": { "type": "integer", "minimum": 1 },
+        "smc": { "type": "string" },
+        "elementId": { "type": "string" },
+        "path": { "type": "string", "description": "要素内のフィールドパス" }
+      },
+      "additionalProperties": false
+    },
+    "evidence": { "type": "string", "description": "該当テキストの抜粋" },
+    "fix": {
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "candidates": { "type": "array", "items": { "type": "string" } },
+        "autoApplicable": { "type": "boolean", "description": "候補が 1 つだけで機械的に適用可能か" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

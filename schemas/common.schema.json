@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/common.schema.json",
+  "title": "SpecLoop common definitions",
+  "$comment": "$id のドメインは仮置き（ADR-0011 / open question Q-08）。",
+  "$defs": {
+    "contextCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9]{1,5}$", "description": "境界づけられたコンテキストのコード。PRJ はプロジェクト全体用に予約。" },
+    "projectCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9]{1,7}$" },
+    "smc": {
+      "type": "string",
+      "pattern": "^SMC-[A-Z][A-Z0-9]{1,7}-[A-Z][A-Z0-9]{1,5}-[A-Z0-9]{1,20}-[0-9]{3}[A-Z]$",
+      "description": "Spec Module Code: SMC-{project}-{context}-{subject}-{kindCode}{variant}"
+    },
+    "kind": {
+      "enum": ["charter", "glossary", "context-map", "rules", "description", "requirements", "model", "behavior", "decision", "interface", "procedure", "scenarios"]
+    },
+    "elementId": {
+      "type": "string",
+      "pattern": "^(REQ|TERM|AGG|ENT|VO|INV|CMD|EVT|POL|BHV|DEC|JDG|PRC|SCN|IFC|REL|SLR)-[A-Z][A-Z0-9]{1,7}-[A-Z0-9][A-Z0-9-]*$"
+    },
+    "elementRef": {
+      "type": "string",
+      "description": "要素 ID、SMC、または手順ステップ参照 (PRC-...#S010)",
+      "pattern": "^((REQ|TERM|AGG|ENT|VO|INV|CMD|EVT|POL|BHV|DEC|JDG|PRC|SCN|IFC|REL|SLR)-[A-Z][A-Z0-9]{1,7}-[A-Z0-9][A-Z0-9-]*(#S[0-9]{3})?|SMC-[A-Z][A-Z0-9]{1,7}-[A-Z][A-Z0-9]{1,5}-[A-Z0-9]{1,20}-[0-9]{3}[A-Z]|FB-[0-9]{4}|LP-[0-9]{4})$"
+    },
+    "refList": { "type": "array", "items": { "$ref": "#/$defs/elementRef" }, "uniqueItems": true },
+    "codeRef": { "type": "string", "description": "実装・テストへの参照。path または path#symbol", "pattern": "^[^\\s]+$" },
+    "issue": {
+      "type": "object",
+      "description": "S1000D の issueNumber / inWork に倣う。inWork>0 は作業中（未承認）。",
+      "required": ["number", "inWork"],
+      "properties": {
+        "number": { "type": "integer", "minimum": 0, "maximum": 999 },
+        "inWork": { "type": "integer", "minimum": 0, "maximum": 99 }
+      },
+      "additionalProperties": false
+    },
+    "status": { "enum": ["draft", "proposed", "approved", "deprecated", "retired"] },
+    "localizedText": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "object", "minProperties": 1, "patternProperties": { "^[a-z]{2}(-[A-Z]{2})?$": { "type": "string", "minLength": 1 } }, "additionalProperties": false }
+      ]
+    },
+    "applicability": {
+      "description": "適用性式。charter で宣言した property のみ使用可。",
+      "oneOf": [
+        { "type": "object", "required": ["all"], "properties": { "all": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/applicability" } } }, "additionalProperties": false },
+        { "type": "object", "required": ["any"], "properties": { "any": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/applicability" } } }, "additionalProperties": false },
+        { "type": "object", "required": ["not"], "properties": { "not": { "$ref": "#/$defs/applicability" } }, "additionalProperties": false },
+        {
+          "type": "object", "required": ["prop"],
+          "properties": {
+            "prop": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$" },
+            "in": { "type": "array", "minItems": 1, "items": { "type": ["string", "number", "boolean"] } },
+            "eq": { "type": ["string", "number", "boolean"] }
+          },
+          "oneOf": [ { "required": ["in"] }, { "required": ["eq"] } ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "judgement": {
+      "type": "object",
+      "description": "人の判断点（暗黙知の境界）。機械はここで判定せず、指定ロールにエスカレーションする。",
+      "required": ["id", "by", "criteria"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^JDG-" },
+        "by": { "type": "string", "description": "判断するロール" },
+        "criteria": { "$ref": "#/$defs/localizedText" },
+        "escalateTo": { "type": "string" },
+        "record": { "type": "boolean", "default": true, "description": "判断結果を記録させるか（フィードバックの源泉になる）" }
+      },
+      "additionalProperties": false
+    },
+    "traceLinks": {
+      "type": "object",
+      "properties": {
+        "derivesFrom": { "$ref": "#/$defs/refList" },
+        "refines": { "$ref": "#/$defs/refList" },
+        "satisfiedBy": { "$ref": "#/$defs/refList" },
+        "verifiedBy": { "$ref": "#/$defs/refList" },
+        "implementedBy": { "type": "array", "items": { "$ref": "#/$defs/codeRef" } },
+        "conflictsWith": { "$ref": "#/$defs/refList" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

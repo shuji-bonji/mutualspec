@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/blocks/behavior.schema.json",
+  "title": "specloop:behavior — 状態遷移（意味モデル層）",
+  "type": "object",
+  "required": ["stateMachines"],
+  "properties": {
+    "stateMachines": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "subject", "initial", "states", "transitions"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^BHV-[A-Z][A-Z0-9]{1,7}-[A-Z0-9-]+$" },
+          "subject": { "type": "string", "pattern": "^AGG-" },
+          "initial": { "type": "string" },
+          "states": {
+            "type": "array", "minItems": 2,
+            "items": {
+              "type": "object", "required": ["name", "term"],
+              "properties": {
+                "name": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+                "term": { "type": "string", "pattern": "^TERM-" },
+                "final": { "type": "boolean", "default": false },
+                "description": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "transitions": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object", "required": ["from", "to", "on"],
+              "properties": {
+                "from": { "type": "string" },
+                "to": { "type": "string" },
+                "on": { "type": "string", "pattern": "^CMD-" },
+                "guard": { "$ref": "../common.schema.json#/$defs/refList", "description": "INV / DEC / JDG への参照" },
+                "emits": { "$ref": "../common.schema.json#/$defs/refList" },
+                "requirement": { "$ref": "../common.schema.json#/$defs/refList" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

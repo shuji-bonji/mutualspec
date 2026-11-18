@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/blocks/glossary.schema.json",
+  "title": "specloop:glossary — ユビキタス言語",
+  "type": "object",
+  "required": ["terms"],
+  "properties": {
+    "terms": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "term", "code", "definition", "category"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^TERM-[A-Z][A-Z0-9]{1,7}-[A-Z0-9][A-Z0-9-]*$" },
+          "term": { "type": "string", "minLength": 1, "description": "正式表記（主言語）" },
+          "translations": { "type": "object", "patternProperties": { "^[a-z]{2}$": { "type": "string" } }, "additionalProperties": false },
+          "code": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*$", "description": "コード上の識別子（クラス名・プロパティ名）" },
+          "definition": { "$ref": "../common.schema.json#/$defs/localizedText" },
+          "category": { "enum": ["entity", "value", "event", "command", "role", "state", "concept", "unit", "document", "artifact"] },
+          "aliases": { "type": "array", "items": { "type": "string" }, "description": "許容される別表記（警告なし）" },
+          "forbidden": {
+            "type": "array",
+            "description": "禁止語。本文に現れたら vocabulary ルールで検出し use を提案する。",
+            "items": {
+              "type": "object", "required": ["text"],
+              "properties": {
+                "text": { "type": "string" },
+                "reason": { "type": "string" },
+                "match": { "enum": ["substring", "word", "regex"], "default": "substring" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "visibility": { "enum": ["internal", "published"], "default": "internal", "description": "published の語のみ他コンテキストから参照可" },
+          "modelRef": { "$ref": "../common.schema.json#/$defs/elementRef" },
+          "unit": { "type": "string" },
+          "s1000d": {
+            "type": "object", "description": "S1000D プロファイル用のマッピングヒント",
+            "properties": { "element": { "type": "string" }, "note": { "type": "string" } },
+            "additionalProperties": false
+          },
+          "examples": { "type": "array", "items": { "type": "string" } },
+          "status": { "$ref": "../common.schema.json#/$defs/status" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

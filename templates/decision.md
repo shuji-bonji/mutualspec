@@ -1,0 +1,34 @@
+---
+specloop: "0.1"
+smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-310A
+kind: decision
+title: "{{タイトル}}"
+summary: "{{1 行要約（Context Pack の目次に使う）}}"
+context: "{{CONTEXT}}"
+issue: { number: 0, inWork: 1 }
+status: draft
+language: ja
+owner: "{{@owner}}"
+---
+
+# {{タイトル}}
+
+## 背景（informative）
+
+{{このモジュールが必要になった背景。規範はここに書かず、下のブロックに書く。}}
+
+## 規範（normative）
+
+```yaml specloop:decision
+decisions:
+  - id: "DEC-{{CONTEXT}}-{{SLUG}}"
+    question: "{{何を決めるか}}"
+    hitPolicy: unique
+    inputs:
+      - { name: "{{input}}", type: boolean, term: "TERM-{{CONTEXT}}-{{SLUG}}" }
+    outputs:
+      - { name: "{{output}}", type: enum, values: ["{{a}}", "{{b}}"] }
+    rules:
+      - { id: R01, when: { "{{input}}": true }, then: { "{{output}}": "{{a}}" } }
+      - { id: R02, when: { "{{input}}": false }, then: { "{{output}}": "{{b}}" } }
+```

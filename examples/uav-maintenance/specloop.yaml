@@ -1,0 +1,40 @@
+# SpecLoop サンプルプロジェクト: 小型 UAV 整備（架空）
+specloop: "0.1"
+project:
+  code: UAVM
+  name: 小型UAV整備サンプル
+  language: ja
+  languages: [ja, en]
+specRoot: specs
+rules:
+  core: builtin
+  project: SMC-UAVM-PRJ-RULES-022A
+loop:
+  dir: loops
+  feedbackDir: feedback
+  innerLoopMaxIterations: 3
+  branchPrefix: loop/
+  gates:
+    G0: { humanApproval: true }
+    G1: { humanApproval: true, maxErrors: 0, maxWarnings: 5 }
+    G2: { humanApproval: false, maxErrors: 0 }
+    G3: { humanApproval: false, maxErrors: 0, requireTraceCoverage: 1.0 }
+    G4: { humanApproval: true }
+trace:
+  codeRoots: [src, tests]
+  annotation: "@specloop"
+  testReports: [reports/junit.xml]
+llm:
+  packBudgetTokens: 24000
+  outputContract: change-proposal
+  advisoryReview: true
+profiles:
+  s1000d:
+    enabled: true
+    modelIdentCode: UAVM
+    issue: "7"
+    validator: s1kd-tools
+    csdbDir: build/csdb
+output:
+  formats: [text, sarif, md]
+  dir: .specloop/reports

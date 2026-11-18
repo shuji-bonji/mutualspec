@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/blocks/requirements.schema.json",
+  "title": "specloop:requirements — ISO/IEC/IEEE 29148 に基づく要求",
+  "type": "object",
+  "required": ["requirements"],
+  "properties": {
+    "requirements": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "level", "type", "statement", "rationale", "priority", "verification", "status"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^REQ-[A-Z][A-Z0-9]{1,7}-[0-9]{4}$" },
+          "level": { "enum": ["stakeholder", "system", "system-element"], "description": "29148 の要求レベル" },
+          "type": { "enum": ["functional", "performance", "interface", "usability", "safety", "security", "quality", "constraint", "process"] },
+          "statement": { "$ref": "../common.schema.json#/$defs/localizedText", "description": "規範文。1 要求 1 事項（singular）。" },
+          "pattern": { "enum": ["ubiquitous", "event-driven", "state-driven", "unwanted-behaviour", "optional-feature", "complex", "free"], "description": "EARS パターン（任意）" },
+          "condition": { "type": "string", "description": "条件（EARS の While/When/If 部分を分けて書く場合）" },
+          "rationale": { "$ref": "../common.schema.json#/$defs/localizedText", "description": "なぜ必要か（BREX が持てない“理由”）" },
+          "priority": { "enum": ["must", "should", "could"] },
+          "risk": { "enum": ["high", "medium", "low"] },
+          "difficulty": { "enum": ["easy", "nominal", "difficult"] },
+          "stakeholders": { "type": "array", "items": { "type": "string" } },
+          "owner": { "type": "string" },
+          "source": { "type": "array", "items": { "type": "string" }, "description": "出所（インタビュー、FB-xxxx、規制など）" },
+          "verification": {
+            "type": "object", "required": ["method", "criteria"],
+            "properties": {
+              "method": { "enum": ["inspection", "analysis", "demonstration", "test"] },
+              "criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          },
+          "applicability": { "$ref": "../common.schema.json#/$defs/applicability" },
+          "validUntil": { "type": "string", "format": "date" },
+          "status": { "$ref": "../common.schema.json#/$defs/status" },
+          "trace": { "$ref": "../common.schema.json#/$defs/traceLinks" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

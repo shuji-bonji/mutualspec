@@ -1,0 +1,69 @@
+--- a/specs/maintenance/SMC-UAVM-MNT-PROPDISP-310A.md	2026-11-19 04:10:48.477927013 +0900
++++ b/specs/maintenance/SMC-UAVM-MNT-PROPDISP-310A.md	2026-11-19 04:13:37.877940433 +0900
+@@ -33,7 +33,7 @@
+       - { id: R01, when: { crackFound: true, chipDepthMm: "-" }, then: { disposition: replace }, rationale: 亀裂は深さに関係なく交換する。 }
+       - { id: R02, when: { crackFound: false, chipDepthMm: "< 0.5" }, then: { disposition: reuse } }
+       - id: R03
+-        when: { crackFound: false, chipDepthMm: "[0.5..1.0)" }
++        when: { crackFound: false, chipDepthMm: "[0.5..1.0]" }
+         then: { disposition: escalate }
+         rationale: この範囲は欠けの位置・形状により判断が分かれるため、検査員が判断する。
+         judgement:
+--- a/specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md	2026-11-19 04:09:48.357898083 +0900
++++ b/specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md	2026-11-19 04:14:26.817931302 +0900
+@@ -28,7 +28,7 @@
+   - id: REQ-MNT-0001
+     level: system
+     type: safety
+-    statement: 作業指示は、整備管理者が承認するまで作業中に移行してはならない。
++    statement: 作業依頼は、整備管理者が適切に承認するまで作業中に移行してはならない。
+     pattern: state-driven
+     rationale: 承認前の着手は、部品・工具・人員の準備不足のまま作業が始まる原因になる。
+     priority: must
+@@ -62,7 +62,6 @@
+     status: approved
+     trace:
+       satisfiedBy: [INV-MNT-0002, CMD-MNT-COMPLETE]
+-      verifiedBy: [SCN-MNT-0003]
+   - id: REQ-MNT-0003
+     level: system
+     type: functional
+@@ -96,7 +95,7 @@
+     verification:
+       method: demonstration
+       criteria:
+-        - 欠け深さ 0.7 mm の点検結果を記録したとき、判断結果と理由の入力を求められること（SCN-MNT-0004）
++        - TBD
+     status: approved
+     trace:
+       satisfiedBy: [JDG-MNT-0001]
+--- a/specs/maintenance/SMC-UAVM-MNT-WORKORDER-300A.md	2026-11-19 04:10:17.245914004 +0900
++++ b/specs/maintenance/SMC-UAVM-MNT-WORKORDER-300A.md	2026-11-19 04:13:37.877940433 +0900
+@@ -34,7 +34,6 @@
+       - { from: Approved, to: InProgress, on: CMD-MNT-START, guard: [INV-MNT-0001], emits: [EVT-MNT-WORK-ORDER-STARTED], requirement: [REQ-MNT-0001] }
+       - { from: Approved, to: Cancelled, on: CMD-MNT-CANCEL, emits: [EVT-MNT-WORK-ORDER-CANCELLED] }
+       - { from: InProgress, to: InProgress, on: CMD-MNT-RECORD-INSPECTION, guard: [DEC-MNT-PROP-DISPOSITION], requirement: [REQ-MNT-0003, REQ-MNT-0004] }
+-      - { from: InProgress, to: Completed, on: CMD-MNT-COMPLETE, guard: [INV-MNT-0002], emits: [EVT-MNT-WORK-ORDER-COMPLETED], requirement: [REQ-MNT-0002] }
+ ```
+ 
+ <!-- specloop:generated begin source=SMC-UAVM-MNT-WORKORDER-300A view=state -->
+--- a/specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md	2026-11-19 04:10:48.481927014 +0900
++++ b/specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md	2026-11-19 04:13:37.877940433 +0900
+@@ -32,7 +32,7 @@
+     safety:
+       - { type: warning, text: バッテリーを取り外すまでプロペラに触れてはならない。モーターが不意に回転し、負傷するおそれがある。 }
+       - { type: caution, text: 回転方向（CW / CCW）の異なるプロペラを取り違えて取り付けてはならない。 }
+-    conditions: [作業指示が作業中であること]
++    conditions: [ENT-MNT-WORK-ORDER の status が InProgress であること]
+   steps:
+     - id: S010
+       text: 機体からバッテリーを取り外す。
+@@ -45,7 +45,7 @@
+     - id: S030
+       text: プロペラ処置が replace の取付位置について、プロペラを取り外す。
+     - id: S040
+-      text: 新しいプロペラを取り付け、トルクレンチで 0.6 N·m に締め付ける。
++      text: 新しいペラを取り付け、トルクレンチで 0.6 Nm に締め付ける。
+       safety:
+         - { type: caution, text: 回転方向の刻印がモーターの刻印と一致していることを確認する。 }
+       expected: トルクレンチが設定値で作動した。

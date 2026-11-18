@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://specloop.dev/schema/0.1/loop.schema.json",
+  "title": "Loop Record (loops/LP-xxxx/loop.yaml)",
+  "type": "object",
+  "required": ["id", "title", "contexts", "trigger", "status", "branch", "phases", "gates"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^LP-[0-9]{4}$" },
+    "title": { "type": "string" },
+    "contexts": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/contextCode" } },
+    "trigger": {
+      "type": "object", "required": ["type"],
+      "properties": {
+        "type": { "enum": ["initiative", "feedback", "defect", "change-request", "standard-update"] },
+        "refs": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "goal": { "type": "string" },
+    "status": { "enum": ["frame", "specify", "validate", "realize", "verify", "learn", "closed", "aborted"] },
+    "branch": { "type": "string" },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["phase", "startedAt"],
+        "properties": {
+          "phase": { "enum": ["frame", "specify", "validate", "realize", "verify", "learn"] },
+          "startedAt": { "type": "string", "format": "date-time" },
+          "endedAt": { "type": "string", "format": "date-time" },
+          "actors": { "type": "array", "items": { "type": "string" } },
+          "innerIterations": { "type": "integer", "minimum": 0 },
+          "notes": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["gate", "result"],
+        "properties": {
+          "gate": { "enum": ["G0", "G1", "G2", "G3", "G4"] },
+          "result": { "enum": ["pending", "passed", "failed", "waived"] },
+          "at": { "type": "string", "format": "date-time" },
+          "approver": { "type": "string" },
+          "evidence": { "type": "array", "items": { "type": "string" } },
+          "summary": {
+            "type": "object",
+            "properties": { "error": { "type": "integer" }, "warning": { "type": "integer" }, "info": { "type": "integer" }, "advisory": { "type": "integer" } },
+            "additionalProperties": false
+          },
+          "waiverReason": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "packs": {
+      "type": "array", "description": "LLM に渡した Context Pack の記録（再現性のため）",
+      "items": {
+        "type": "object", "required": ["purpose", "sha256"],
+        "properties": {
+          "purpose": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "model": { "type": "string" },
+          "file": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "modulesChanged": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["smc", "from", "to"],
+        "properties": {
+          "smc": { "$ref": "common.schema.json#/$defs/smc" },
+          "from": { "type": "string", "pattern": "^([0-9]{3}-[0-9]{2}|new)$" },
+          "to": { "type": "string", "pattern": "^[0-9]{3}-[0-9]{2}$" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "feedbackConsumed": { "type": "array", "items": { "type": "string", "pattern": "^FB-[0-9]{4}$" } },
+    "feedbackCreated": { "type": "array", "items": { "type": "string", "pattern": "^FB-[0-9]{4}$" } },
+    "decisions": { "type": "array", "items": { "type": "string" }, "description": "このループで下した判断（ADR 参照可）" },
+    "outcome": { "type": "string" }
+  },
+  "additionalProperties": false
+}
