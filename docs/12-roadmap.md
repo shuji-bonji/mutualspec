@@ -37,7 +37,7 @@ flowchart LR
 | 閲覧サイト | ID リンク・図・トレースを持つ静的サイト（IETM ではない） |
 | 組織ルールの配布 | 組織 MSRX を npm パッケージとして配布・版管理 |
 | 取り込みと投影 | 顧客の Excel・Word・PDF を正本にせず、構造化仕様からの投影にする将来の拡張候補。[14](14-future-ingest-and-projection.md)。未採用。MVP / v1.0 の範囲外（[13](13-open-questions-and-risks.md) の Q-13） |
-| エージェント編成 | 正本と判定は MutualSpec のまま、誰がいつ走るかと実行記録だけを agentchattr / LangChain / LangGraph / LangSmith に委ねる将来の拡張候補。[15](15-future-agent-orchestration.md)。未採用。MVP / v1.0 の範囲外（Q-14。判断は M4 以降） |
+| エージェント編成 | 正本と判定は MutualSpec のまま、誰がいつ走るかと実行記録だけを agentchattr / LangChain / LangGraph / LangSmith に委ねる将来の拡張候補。[15](15-future-agent-orchestration.md)。同文書のビュー（端末・静的 HTML・localhost の一覧）も未採用。MVP / v1.0 の範囲外（Q-14 は M4 以降、ビューの段は Q-15） |
 
 > [!NOTE]
 > 「取り込みと投影」は **将来の拡張候補** です。採用は決まっていません。MVP にも v1.0 にも含めず、時期も未定です。詳細は [14](14-future-ingest-and-projection.md)、採否は [13](13-open-questions-and-risks.md) の Q-13 です。
