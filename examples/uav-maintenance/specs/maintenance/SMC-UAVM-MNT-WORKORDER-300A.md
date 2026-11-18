@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-MNT-WORKORDER-300A
 kind: behavior
 title: 作業指示 状態遷移
@@ -15,9 +15,9 @@ refs: [SMC-UAVM-MNT-WORKORDER-200A]
 # 作業指示 状態遷移
 
 状態遷移は BREX では表現できない「業務の順序」を持つ意味モデル層の要素です。
-YAML が正本で、下の Mermaid 図は `specloop render` が生成します（手で編集しない）。
+YAML が正本で、下の Mermaid 図は `mutualspec render` が生成します（手で編集しない）。
 
-```yaml specloop:behavior
+```yaml mutualspec:behavior
 stateMachines:
   - id: BHV-MNT-WORK-ORDER-LIFECYCLE
     subject: AGG-MNT-WORK-ORDER
@@ -37,7 +37,7 @@ stateMachines:
       - { from: InProgress, to: Completed, on: CMD-MNT-COMPLETE, guard: [INV-MNT-0002], emits: [EVT-MNT-WORK-ORDER-COMPLETED], requirement: [REQ-MNT-0002] }
 ```
 
-<!-- specloop:generated begin source=SMC-UAVM-MNT-WORKORDER-300A view=state -->
+<!-- mutualspec:generated begin source=SMC-UAVM-MNT-WORKORDER-300A view=state -->
 ```mermaid
 stateDiagram-v2
   [*] --> Draft
@@ -50,4 +50,4 @@ stateDiagram-v2
   Completed --> [*]
   Cancelled --> [*]
 ```
-<!-- specloop:generated end -->
+<!-- mutualspec:generated end -->

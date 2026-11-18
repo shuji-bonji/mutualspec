@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/specloop.config.schema.json",
-  "title": "specloop.yaml",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/mutualspec.config.schema.json",
+  "title": "mutualspec.yaml",
   "type": "object",
-  "required": ["specloop", "project", "specRoot", "rules"],
+  "required": ["mutualspec", "project", "specRoot", "rules"],
   "properties": {
-    "specloop": { "const": "0.1" },
+    "mutualspec": { "const": "0.1" },
     "project": {
       "type": "object",
       "required": ["code", "name", "language"],
@@ -59,7 +59,7 @@
       "type": "object",
       "properties": {
         "codeRoots": { "type": "array", "items": { "type": "string" } },
-        "annotation": { "type": "string", "default": "@specloop" },
+        "annotation": { "type": "string", "default": "@mutualspec" },
         "testReports": { "type": "array", "items": { "type": "string" }, "description": "JUnit XML のパス/glob" }
       },
       "additionalProperties": false
@@ -96,7 +96,7 @@
       "type": "object",
       "properties": {
         "formats": { "type": "array", "items": { "enum": ["text", "json", "sarif", "md"] } },
-        "dir": { "type": "string", "default": ".specloop/reports" }
+        "dir": { "type": "string", "default": ".mutualspec/reports" }
       },
       "additionalProperties": false
     }

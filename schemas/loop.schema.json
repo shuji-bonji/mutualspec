@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/loop.schema.json",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/loop.schema.json",
   "title": "Loop Record (loops/LP-xxxx/loop.yaml)",
   "type": "object",
   "required": ["id", "title", "contexts", "trigger", "status", "branch", "phases", "gates"],

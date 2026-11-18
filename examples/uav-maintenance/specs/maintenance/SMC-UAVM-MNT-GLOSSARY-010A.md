@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-MNT-GLOSSARY-010A
 kind: glossary
 title: 整備実施 用語集（ユビキタス言語）
@@ -16,7 +16,7 @@ owner: "@maintenance-owner"
 この用語集は MNT コンテキストの中でだけ有効です。`code` はそのままクラス名・プロパティ名・状態名として使います。
 `visibility: published` の語だけが、コンテキストマップの経路を通じて他コンテキストから参照できます。
 
-```yaml specloop:glossary
+```yaml mutualspec:glossary
 terms:
   - id: TERM-MNT-WORK-ORDER
     term: 作業指示

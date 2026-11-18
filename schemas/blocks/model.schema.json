@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/blocks/model.schema.json",
-  "title": "specloop:model — DDD 戦術設計（集約・エンティティ・値オブジェクト・不変条件・コマンド・イベント）",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/blocks/model.schema.json",
+  "title": "mutualspec:model — DDD 戦術設計（集約・エンティティ・値オブジェクト・不変条件・コマンド・イベント）",
   "type": "object",
   "required": ["aggregates"],
   "$defs": {

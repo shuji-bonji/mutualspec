@@ -10,7 +10,7 @@
 ## 決定
 
 - 1 つの Spec Module = 1 つの Markdown ファイル。
-- **規範**: YAML front matter と、```` ```yaml specloop:<kind> ```` の型付き YAML ブロック（JSON Schema で検証）。
+- **規範**: YAML front matter と、```` ```yaml mutualspec:<kind> ```` の型付き YAML ブロック（JSON Schema で検証）。
 - **説明**: Markdown 本文（informative）。
 - **生成物**: Mermaid 図（マーカーで囲む）、Spec Graph（JSON）、Context Pack、S1000D XML。手で編集しない。
 

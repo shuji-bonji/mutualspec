@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-MNT-PROPDISP-310A
 kind: decision
 title: プロペラ処置 判断表
@@ -20,7 +20,7 @@ refs: [SMC-UAVM-MNT-GLOSSARY-010A]
 この判断表は MNT が所有し、DOC の手順 `PRC-DOC-PROPELLER-REPLACE#S020` から参照されます（コンテキストマップ REL-PRJ-MNT-DOC）。
 手順書は「何をするか」を、判断表は「どう判断するか」を持ちます。BREX が持てない判断ロジックをここで明示します。
 
-```yaml specloop:decision
+```yaml mutualspec:decision
 decisions:
   - id: DEC-MNT-PROP-DISPOSITION
     question: 点検したプロペラを再使用するか、交換するか。
@@ -49,7 +49,7 @@ decisions:
       verifiedBy: [SCN-MNT-0002]
 ```
 
-<!-- specloop:generated begin source=SMC-UAVM-MNT-PROPDISP-310A view=decision-flow -->
+<!-- mutualspec:generated begin source=SMC-UAVM-MNT-PROPDISP-310A view=decision-flow -->
 ```mermaid
 flowchart TD
   A{"亀裂あり？"} -->|true| R01["R01: replace"]
@@ -58,4 +58,4 @@ flowchart TD
   B -->|"0.5 以上 1.0 未満"| R03["R03: escalate<br/>JDG-MNT-0001 検査員判断"]
   B -->|"1.0 以上"| R04["R04: replace"]
 ```
-<!-- specloop:generated end -->
+<!-- mutualspec:generated end -->

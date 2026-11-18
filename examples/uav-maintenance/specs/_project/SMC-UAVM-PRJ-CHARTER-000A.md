@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-PRJ-CHARTER-000A
 kind: charter
 title: 小型UAV整備サンプル プロジェクト憲章
@@ -14,14 +14,14 @@ owner: "@domain-owner"
 # 小型UAV整備サンプル プロジェクト憲章
 
 > [!CAUTION]
-> このプロジェクトは SpecLoop の設計検証用の**架空のサンプル**です。数値（閾値・トルク値）はすべて説明用であり、実機の整備に使ってはなりません。
+> このプロジェクトは MutualSpec の設計検証用の**架空のサンプル**です。数値（閾値・トルク値）はすべて説明用であり、実機の整備に使ってはなりません。
 
 ## 目的
 
 小型 UAV（マルチコプター）のプロペラ点検・交換作業を、作業指示から技術文書、部品引当まで一貫した仕様で扱う。
 人（整備士・検査員・整備管理者）と LLM が同じ語彙と境界で仕様を読み書きできることを示す。
 
-```yaml specloop:charter
+```yaml mutualspec:charter
 charter:
   context: PRJ
   name: 小型UAV整備サンプル

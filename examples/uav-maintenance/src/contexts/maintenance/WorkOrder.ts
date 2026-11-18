@@ -1,5 +1,5 @@
-// 生成元: specloop generate ts --aggregate AGG-MNT-WORK-ORDER（スケルトン）＋ 人/LLM による実装
-// @specloop AGG-MNT-WORK-ORDER BHV-MNT-WORK-ORDER-LIFECYCLE
+// 生成元: mutualspec generate ts --aggregate AGG-MNT-WORK-ORDER（スケルトン）＋ 人/LLM による実装
+// @mutualspec AGG-MNT-WORK-ORDER BHV-MNT-WORK-ORDER-LIFECYCLE
 import { decidePropellerDisposition, type PropellerDisposition } from "./PropellerDisposition";
 
 export type WorkOrderStatus = "Draft" | "Approved" | "InProgress" | "Completed" | "Cancelled";
@@ -26,18 +26,18 @@ export class WorkOrder {
   private readonly _inspections = new Map<number, PropellerInspection>();
   readonly events: string[] = [];
 
-  // @specloop CMD-MNT-RAISE
+  // @mutualspec CMD-MNT-RAISE
   constructor(readonly workOrderId: string, readonly airframeSerial: string, readonly model: Model) {}
 
   get status(): WorkOrderStatus { return this._status; }
   get inspections(): PropellerInspection[] { return [...this._inspections.values()]; }
 
-  // @specloop CMD-MNT-APPROVE
+  // @mutualspec CMD-MNT-APPROVE
   approve(): void {
     this.transition(["Draft"], "Approved", "WorkOrderApproved");
   }
 
-  // @specloop CMD-MNT-START INV-MNT-0001 REQ-MNT-0001
+  // @mutualspec CMD-MNT-START INV-MNT-0001 REQ-MNT-0001
   start(): void {
     if (this._status !== "Approved") {
       throw new DomainRuleViolation("INV-MNT-0001", "作業中に移行できるのは承認済みの作業指示だけである。");
@@ -45,7 +45,7 @@ export class WorkOrder {
     this.transition(["Approved"], "InProgress", "WorkOrderStarted");
   }
 
-  // @specloop CMD-MNT-RECORD-INSPECTION INV-MNT-0003 REQ-MNT-0003 REQ-MNT-0004
+  // @mutualspec CMD-MNT-RECORD-INSPECTION INV-MNT-0003 REQ-MNT-0003 REQ-MNT-0004
   recordInspection(position: number, crackFound: boolean, chipDepthMm: number, inspectorJudgement?: string): PropellerInspection {
     this.require(["InProgress"]);
     if (!positions(this.model).includes(position)) throw new DomainRuleViolation("VO-MNT-PROPELLER-INSPECTION", `取付位置 ${position} は型式 ${this.model} に存在しない。`);
@@ -56,7 +56,7 @@ export class WorkOrder {
     return inspection;
   }
 
-  // @specloop CMD-MNT-COMPLETE INV-MNT-0002 REQ-MNT-0002
+  // @mutualspec CMD-MNT-COMPLETE INV-MNT-0002 REQ-MNT-0002
   complete(): void {
     const missing = positions(this.model).filter((p) => !this._inspections.has(p));
     if (missing.length > 0) {
@@ -69,7 +69,7 @@ export class WorkOrder {
     this.transition(["InProgress"], "Completed", "WorkOrderCompleted");
   }
 
-  // @specloop CMD-MNT-CANCEL
+  // @mutualspec CMD-MNT-CANCEL
   cancel(): void {
     this.transition(["Draft", "Approved"], "Cancelled", "WorkOrderCancelled");
   }

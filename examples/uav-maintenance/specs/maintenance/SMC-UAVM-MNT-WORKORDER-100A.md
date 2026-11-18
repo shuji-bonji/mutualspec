@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-MNT-WORKORDER-100A
 kind: requirements
 title: 作業指示 要求仕様
@@ -23,7 +23,7 @@ refs: [SMC-UAVM-MNT-GLOSSARY-010A, SMC-UAVM-MNT-WORKORDER-200A, SMC-UAVM-MNT-PRO
 
 規範的な内容は下の YAML ブロックが正本です。この節の文章は背景説明（informative）です。
 
-```yaml specloop:requirements
+```yaml mutualspec:requirements
 requirements:
   - id: REQ-MNT-0001
     level: system
@@ -92,7 +92,7 @@ requirements:
     risk: medium
     difficulty: nominal
     stakeholders: [Inspector]
-    source: [SpecLoop 判断点の運用方針]
+    source: [MutualSpec 判断点の運用方針]
     verification:
       method: demonstration
       criteria:
@@ -105,7 +105,7 @@ requirements:
 
 ## 要求間の関係
 
-<!-- specloop:generated begin source=SMC-UAVM-MNT-WORKORDER-100A view=trace -->
+<!-- mutualspec:generated begin source=SMC-UAVM-MNT-WORKORDER-100A view=trace -->
 ```mermaid
 flowchart LR
   REQ1["REQ-MNT-0001<br/>承認前の着手禁止"] --> INV1["INV-MNT-0001"]
@@ -117,4 +117,4 @@ flowchart LR
   REQ3 -.->|verifiedBy| SCN2["SCN-MNT-0002"]
   REQ4 -.->|verifiedBy| SCN4["SCN-MNT-0004"]
 ```
-<!-- specloop:generated end -->
+<!-- mutualspec:generated end -->

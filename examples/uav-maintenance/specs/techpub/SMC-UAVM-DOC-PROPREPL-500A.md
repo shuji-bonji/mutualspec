@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-DOC-PROPREPL-500A
 kind: procedure
 title: プロペラの点検と交換
@@ -18,7 +18,7 @@ applicability: { prop: model, in: [QX-4, QX-6] }
 > [!NOTE]
 > トルク値はサンプル用の架空値です。
 
-```yaml specloop:procedure
+```yaml mutualspec:procedure
 procedure:
   id: PRC-DOC-PROPELLER-REPLACE
   title: プロペラの点検と交換
@@ -60,7 +60,7 @@ procedure:
     systemCode: "61"
 ```
 
-<!-- specloop:generated begin source=SMC-UAVM-DOC-PROPREPL-500A view=procedure-flow -->
+<!-- mutualspec:generated begin source=SMC-UAVM-DOC-PROPREPL-500A view=procedure-flow -->
 ```mermaid
 flowchart TD
   S010["S010 バッテリーを取り外す"] --> S020["S020 点検・記録"]
@@ -73,4 +73,4 @@ flowchart TD
   S030 --> S040["S040 取付・0.6 N·m 締付"]
   S040 --> S900
 ```
-<!-- specloop:generated end -->
+<!-- mutualspec:generated end -->

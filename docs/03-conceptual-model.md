@@ -1,6 +1,6 @@
 # 03. 概念モデル（メタモデル）
 
-SpecLoop のメタモデルは、DDD・S1000D・ISO/IEC/IEEE 29148 から必要な概念だけを取り出し、1 つの小さなモデルに統合したものです。
+MutualSpec のメタモデルは、DDD・S1000D・ISO/IEC/IEEE 29148 から必要な概念だけを取り出し、1 つの小さなモデルに統合したものです。
 S1000D や 29148 の全体を内部に持つのではなく、**対応づけ（マッピング）**として持ちます。
 
 ## 1. 全体像: 5 つの層と 1 つの横断軸
@@ -108,7 +108,7 @@ classDiagram
     extends
   }
   class Rule {
-    id SLR
+    id MSR
     kind
     use
     severity
@@ -161,7 +161,7 @@ classDiagram
   Loop --> Feedback : consumes
 ```
 
-**モデルの不変条件（SpecLoop 自身の）**
+**モデルの不変条件（MutualSpec 自身の）**
 
 1. 要素はちょうど 1 つのモジュールに属し、モジュールはちょうど 1 つのコンテキストに属する（要素 ID の第 2 セグメント = モジュールの context）。
 2. 他コンテキストの要素への参照は、コンテキストマップの relation の向き（下流 → 上流。partnership / shared-kernel は双方向）に沿い、かつ published な要素に限る。ただしトレース用の参照（derivesFrom, satisfiedBy, verifiedBy, satisfies など）は published でなくてよい（向きの制約は適用）。
@@ -170,7 +170,7 @@ classDiagram
 
 ## 3. DDD との対応
 
-| DDD の概念 | SpecLoop での表現 | 補足 |
+| DDD の概念 | MutualSpec での表現 | 補足 |
 |---|---|---|
 | 境界づけられたコンテキスト | Context（コード・ディレクトリ・charter モジュール） | ディレクトリ = コンテキスト。コード側は charter の `codeModule` で対応 |
 | サブドメイン（core / supporting / generic） | `charter.subdomainType`、`context-map.contexts[].type` | — |
@@ -187,18 +187,18 @@ classDiagram
 
 ## 4. S1000D との対応
 
-SpecLoop は S1000D の**考え方**を借り、S1000D の**形式**は書き出し先（プロファイル）として扱います（[ADR-0012](adr/0012-s1000d-as-profile.md)）。
+MutualSpec は S1000D の**考え方**を借り、S1000D の**形式**は書き出し先（プロファイル）として扱います（[ADR-0012](adr/0012-s1000d-as-profile.md)）。
 
-| S1000D | SpecLoop | 対応の内容 |
+| S1000D | MutualSpec | 対応の内容 |
 |---|---|---|
 | Data Module（DM） | Spec Module | 独立して識別・版管理・検証・再利用される最小単位 |
-| Data Module Code（DMC） | SMC | 階層的な意味を持つ識別子。種別コード（info code 相当）を末尾に持つ。`022` = ルールは BREX の info code 022 に揃え、`040` = 記述も S1000D の記述 DM（040）に揃えた。他のコードは SpecLoop 独自 |
+| Data Module Code（DMC） | SMC | 階層的な意味を持つ識別子。種別コード（info code 相当）を末尾に持つ。`022` = ルールは BREX の info code 022 に揃え、`040` = 記述も S1000D の記述 DM（040）に揃えた。他のコードは MutualSpec 独自 |
 | info code | kind / 種別コード | 内容の種類を表す |
 | issueNumber / inWork | `issue.number` / `issue.inWork` | 承認版と作業中版の区別 |
 | identAndStatusSection | YAML front matter | 識別・状態・適用性・参照ルール |
 | CSDB | Git リポジトリの `specs/` | 共通のソース。履歴は Git |
 | BREX DM（info code 022） | kind: rules（種別コード 022）のモジュール | ルール自体が仕様モジュールとして版管理される |
-| default BREX | `SMC-SPECLOOP-CORE-RULES-022A`（ツール同梱） | すべてのプロジェクトが継承する既定ルール |
+| default BREX | `SMC-MSPEC-CORE-RULES-022A`（ツール同梱） | すべてのプロジェクトが継承する既定ルール |
 | BREX の階層（layered BREX） | ruleset.layer + extends（core → organization → project → context） | 下位は狭めるだけ |
 | structureObjectRule: objectPath（XPath） | rule.select（JSONPath, RFC 9535）+ rule.path | 対象選択の言語を XML から Spec Graph（JSON）へ |
 | allowedObjectFlag 0 / 1 / 2 | rule.flag 0 / 1 / 2 | 0 = 禁止、1 = 必須、2 = 任意（使うなら値は許可値） |
@@ -213,7 +213,7 @@ SpecLoop は S1000D の**考え方**を借り、S1000D の**形式**は書き出
 
 ## 5. BREX を超える層 — 意味モデル層（Domain Semantics Layer）
 
-会話（第 2・3 回）の核心は「BREX は文書の**構造**のルールであり、業務の**順序・判断・理由**は持てない。そこを別の明示的なモデルで補えば、人と LLM が相互に理解できる文書になる」という点でした。SpecLoop はこれを**意味モデル層**として独立させます（[ADR-0006](adr/0006-domain-semantics-layer.md)）。
+会話（第 2・3 回）の核心は「BREX は文書の**構造**のルールであり、業務の**順序・判断・理由**は持てない。そこを別の明示的なモデルで補えば、人と LLM が相互に理解できる文書になる」という点でした。MutualSpec はこれを**意味モデル層**として独立させます（[ADR-0006](adr/0006-domain-semantics-layer.md)）。
 
 ### 5.1 BREX が答えられる問い／答えられない問い
 
@@ -245,12 +245,12 @@ flowchart LR
 ```
 
 - **文書の構造と業務のルールを分離しつつ接続する**: 手順（DOC コンテキスト）は判断表（MNT コンテキスト）を `step.decision` で**参照**するだけで、判断ロジックを本文に書きません。手順書を読む人は判断表のビュー（図・表）を、LLM は判断表の構造を受け取ります。
-- **判断表の検査**: hitPolicy `unique` の場合、全入力の組み合わせにちょうど 1 行が一致すること（重複なし・漏れなし）をバリデータが検査します（SLR-CORE-00205）。
-- **状態遷移の検査**: 初期状態から全状態に到達できること、終了状態以外に出口があること、トリガーが対象集約のコマンドであること（SLR-CORE-00203/00204）。
+- **判断表の検査**: hitPolicy `unique` の場合、全入力の組み合わせにちょうど 1 行が一致すること（重複なし・漏れなし）をバリデータが検査します（MSR-CORE-00205）。
+- **状態遷移の検査**: 初期状態から全状態に到達できること、終了状態以外に出口があること、トリガーが対象集約のコマンドであること（MSR-CORE-00203/00204）。
 
 ### 5.3 判断点（JDG）— 暗黙知の境界
 
-会話（第 5 回）で「構造化できない判断は、別の境界に切り出し、ループの外に置く」とした点を、SpecLoop は**判断点**として仕様の中に明示します。
+会話（第 5 回）で「構造化できない判断は、別の境界に切り出し、ループの外に置く」とした点を、MutualSpec は**判断点**として仕様の中に明示します。
 
 - 判断点は `by`（判断するロール）、`criteria`（判断の観点）、`escalateTo`、`record`（判断結果を記録させるか）を持ちます。
 - 機械（バリデータ・生成コード・LLM）は判断点で**決めません**。生成コードは「判断待ち」状態を返し、LLM の Context Pack には「この点は人が判断する」と明記されます。
@@ -274,25 +274,25 @@ flowchart LR
 
 ### 6.1 要求の属性
 
-| 属性 | SpecLoop のフィールド | 必須 | 出典 |
+| 属性 | MutualSpec のフィールド | 必須 | 出典 |
 |---|---|---|---|
 | 識別（identification） | `id`（`REQ-{ctx}-{4 桁}`） | ✅ | 29148 の属性例 |
 | 版（version） | モジュールの `issue` と Git 履歴 | ✅（モジュール単位） | 29148 の属性例 |
 | 所有者（owner） | `owner`（省略時はモジュールの owner） | — | 29148 の属性例 |
-| 優先度（priority） | `priority`（must / should / could） | ✅ | 29148 の属性例（値の区分は SpecLoop の選択） |
+| 優先度（priority） | `priority`（must / should / could） | ✅ | 29148 の属性例（値の区分は MutualSpec の選択） |
 | リスク（risk） | `risk`（high / medium / low） | — | 29148 の属性例 |
 | 理由（rationale） | `rationale` | ✅ | 29148 の属性例 |
 | 難易度（difficulty） | `difficulty`（easy / nominal / difficult） | — | 29148 の属性例 |
-| 種類（type） | `type`（functional, performance, interface, usability, safety, security, quality, constraint, process） | ✅ | 29148 の属性例（区分は SpecLoop の選択） |
+| 種類（type） | `type`（functional, performance, interface, usability, safety, security, quality, constraint, process） | ✅ | 29148 の属性例（区分は MutualSpec の選択） |
 | 検証方法と基準 | `verification.method`（inspection / analysis / demonstration / test）と `criteria` | ✅ | 29148 の検証方法の区分を採用 |
 | 要求レベル | `level`（stakeholder / system / system-element） | ✅ | 29148 の要求の階層 |
-| 出所 | `source` | — | SpecLoop 追加（necessary の根拠） |
-| 有効期限・適用 | `validUntil`、`applicability` | — | 29148 の necessary（期限の明示）＋ SpecLoop の適用性 |
-| 状態 | `status` | ✅ | SpecLoop 追加 |
-| トレース | `trace`（derivesFrom, refines, satisfiedBy, verifiedBy, implementedBy, conflictsWith） | — | SpecLoop 追加 |
+| 出所 | `source` | — | MutualSpec 追加（necessary の根拠） |
+| 有効期限・適用 | `validUntil`、`applicability` | — | 29148 の necessary（期限の明示）＋ MutualSpec の適用性 |
+| 状態 | `status` | ✅ | MutualSpec 追加 |
+| トレース | `trace`（derivesFrom, refines, satisfiedBy, verifiedBy, implementedBy, conflictsWith） | — | MutualSpec 追加 |
 
 > [!NOTE]
-> 29148 本文の条項番号・属性の完全な一覧は、規格書（有償）で確認してください。SpecLoop は特性名と属性名だけを参照し、規格本文は同梱しません。
+> 29148 本文の条項番号・属性の完全な一覧は、規格書（有償）で確認してください。MutualSpec は特性名と属性名だけを参照し、規格本文は同梱しません。
 
 文型は任意で EARS（Easy Approach to Requirements Syntax）のパターン名を `pattern` に記録できます（ubiquitous / event-driven / state-driven / unwanted-behaviour / optional-feature / complex）。
 
@@ -300,14 +300,14 @@ flowchart LR
 
 | 特性 | 機械で検査する方法 | ルール | 人が見る点 |
 |---|---|---|---|
-| necessary（必要） | `source` の有無 | SLR-CORE-00306（info） | 本当に必要か |
-| appropriate（適切） | stakeholder レベルに設計語がないか | SLR-CORE-00307 | 抽象度 |
-| unambiguous（曖昧でない） | 曖昧語レキシコン（日本語・英語） | SLR-CORE-00301 | 文脈上の多義 |
-| complete（完全） | TBD / 未定 などのプレースホルダ | SLR-CORE-00305 | 理解に他文書が要らないか |
-| singular（単一） | 義務表現・接続詞の数 | SLR-CORE-00302 | — |
-| feasible（実現可能） | 機械判定しない | SLR-CORE-00401（narrative） | コスト・期間・技術 |
-| verifiable（検証可能） | 検証基準に数値・状態名・SCN ID があるか、must 要求に verifiedBy があるか | SLR-CORE-00303, 00207 | — |
-| correct（正しい） | 機械判定しない | SLR-CORE-00402（narrative） | 元のニーズとの一致 |
-| conforming（準拠） | 文型（〜しなければならない／shall） | SLR-CORE-00304 | — |
+| necessary（必要） | `source` の有無 | MSR-CORE-00306（info） | 本当に必要か |
+| appropriate（適切） | stakeholder レベルに設計語がないか | MSR-CORE-00307 | 抽象度 |
+| unambiguous（曖昧でない） | 曖昧語レキシコン（日本語・英語） | MSR-CORE-00301 | 文脈上の多義 |
+| complete（完全） | TBD / 未定 などのプレースホルダ | MSR-CORE-00305 | 理解に他文書が要らないか |
+| singular（単一） | 義務表現・接続詞の数 | MSR-CORE-00302 | — |
+| feasible（実現可能） | 機械判定しない | MSR-CORE-00401（narrative） | コスト・期間・技術 |
+| verifiable（検証可能） | 検証基準に数値・状態名・SCN ID があるか、must 要求に verifiedBy があるか | MSR-CORE-00303, 00207 | — |
+| correct（正しい） | 機械判定しない | MSR-CORE-00402（narrative） | 元のニーズとの一致 |
+| conforming（準拠） | 文型（〜しなければならない／shall） | MSR-CORE-00304 | — |
 
-要求**集合**の特性（完全性・一貫性など）は、トレース（全 must 要求が検証されているか）と L5 の LLM 助言（矛盾・重複の候補提示, SLR-CORE-00501）で補います。一貫性の最終判断は人が行います。
+要求**集合**の特性（完全性・一貫性など）は、トレース（全 must 要求が検証されているか）と L5 の LLM 助言（矛盾・重複の候補提示, MSR-CORE-00501）で補います。一貫性の最終判断は人が行います。

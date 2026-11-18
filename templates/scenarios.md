@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-600A
 kind: scenarios
 title: "{{タイトル}}"
@@ -19,7 +19,7 @@ owner: "{{@owner}}"
 
 ## 規範（normative）
 
-```yaml specloop:scenarios
+```yaml mutualspec:scenarios
 scenarios:
   - id: "SCN-{{CONTEXT}}-0001"
     title: "{{シナリオ名}}"

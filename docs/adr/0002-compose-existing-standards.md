@@ -10,7 +10,7 @@
 ## 決定
 
 - 標準（ISO/IEC/IEEE 29148、S1000D の考え方、JSON Schema、CommonMark、Mermaid、SARIF、JSONPath、MCP）と OSS（Ajv、remark、yaml、mermaid-cli、s1kd-tools など）を再利用する。
-- 自作は Spec Graph、SLRX ルールエンジンと組込みチェック、Context Pack、Change Proposal の適用器、ビュー・スケルトン生成器、CLI、S1000D 写像に限る。
+- 自作は Spec Graph、MSRX ルールエンジンと組込みチェック、Context Pack、Change Proposal の適用器、ビュー・スケルトン生成器、CLI、S1000D 写像に限る。
 
 ## 検討した代替案
 

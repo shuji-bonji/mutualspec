@@ -1,4 +1,4 @@
-# ADR-0005: ルールモデル: SLRX（BREX の構造を Spec Graph に写す）
+# ADR-0005: ルールモデル: MSRX（BREX の構造を Spec Graph に写す）
 
 - 状態: Accepted
 - 日付: 2026-11-19
@@ -24,3 +24,4 @@ BREX は objectPath（XPath）、allowedObjectFlag、objectValue、objectUse で
 ## 結果
 
 - S1000D 利用者は「objectPath が XPath ではなく JSONPath」である点に慣れる必要がある（A-03）。
+- ルールモデルの名前は当初 SLRX（SpecLoop Rules eXchange）だった。2026-11-19 のフレームワーク改名に合わせて **MSRX（MutualSpec Rules eXchange）** に変えた（[ADR-0015](0015-rename-to-mutualspec.md)）。BREX（Business Rules EXchange）に倣う「◯◯ Rules eXchange」の形は維持した。中身・書式に変更はない。

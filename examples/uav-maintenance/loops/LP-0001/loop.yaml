@@ -10,9 +10,9 @@ branch: loop/LP-0001-propeller-workorder
 phases:
   - { phase: frame, startedAt: "2026-11-02T10:00:00+09:00", endedAt: "2026-11-02T11:30:00+09:00", actors: ["@domain-owner"] }
   - { phase: specify, startedAt: "2026-11-02T13:00:00+09:00", endedAt: "2026-11-04T17:00:00+09:00", actors: ["@maintenance-owner", "@techpub-owner", "llm:drafter"], innerIterations: 2 }
-  - { phase: validate, startedAt: "2026-11-04T17:00:00+09:00", endedAt: "2026-11-05T12:00:00+09:00", actors: ["specloop", "@domain-owner"], innerIterations: 1 }
+  - { phase: validate, startedAt: "2026-11-04T17:00:00+09:00", endedAt: "2026-11-05T12:00:00+09:00", actors: ["mutualspec", "@domain-owner"], innerIterations: 1 }
   - { phase: realize, startedAt: "2026-11-05T13:00:00+09:00", endedAt: "2026-11-07T18:00:00+09:00", actors: ["@dev", "llm:implementer"] }
-  - { phase: verify, startedAt: "2026-11-07T18:00:00+09:00", endedAt: "2026-11-08T10:00:00+09:00", actors: ["specloop", "ci"] }
+  - { phase: verify, startedAt: "2026-11-07T18:00:00+09:00", endedAt: "2026-11-08T10:00:00+09:00", actors: ["mutualspec", "ci"] }
   - { phase: learn, startedAt: "2026-11-10T09:00:00+09:00", endedAt: "2026-11-12T16:00:00+09:00", actors: ["@domain-owner", "@inspector"] }
 gates:
   - { gate: G0, result: passed, at: "2026-11-02T11:30:00+09:00", approver: "@domain-owner", evidence: [specs/_project/SMC-UAVM-PRJ-CHARTER-000A.md] }
@@ -20,14 +20,14 @@ gates:
     result: passed
     at: "2026-11-05T12:00:00+09:00"
     approver: "@domain-owner"
-    evidence: [loops/LP-0001/report-iter1.md, .specloop/reports/LP-0001-G1.sarif]
+    evidence: [loops/LP-0001/report-iter1.md, .mutualspec/reports/LP-0001-G1.sarif]
     summary: { error: 0, warning: 1, info: 2, advisory: 1 }
-  - { gate: G2, result: passed, at: "2026-11-07T18:00:00+09:00", evidence: [".specloop/reports/LP-0001-G2.sarif"], summary: { error: 0, warning: 0, info: 0, advisory: 0 } }
-  - { gate: G3, result: passed, at: "2026-11-08T10:00:00+09:00", evidence: [reports/junit.xml, .specloop/reports/LP-0001-trace.md], summary: { error: 0, warning: 0, info: 0, advisory: 0 } }
+  - { gate: G2, result: passed, at: "2026-11-07T18:00:00+09:00", evidence: [".mutualspec/reports/LP-0001-G2.sarif"], summary: { error: 0, warning: 0, info: 0, advisory: 0 } }
+  - { gate: G3, result: passed, at: "2026-11-08T10:00:00+09:00", evidence: [reports/junit.xml, .mutualspec/reports/LP-0001-trace.md], summary: { error: 0, warning: 0, info: 0, advisory: 0 } }
   - { gate: G4, result: passed, at: "2026-11-12T16:00:00+09:00", approver: "@domain-owner" }
 packs:
-  - { purpose: "specify MNT requirements draft", sha256: 3f1c0a9e5b7d2c4e6f8a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f708192a3b4, file: .specloop/packs/LP-0001-specify-MNT.md }
-  - { purpose: "implement AGG-MNT-WORK-ORDER", sha256: 9a8b7c6d5e4f30211203f4e5d6c7b8a90f1e2d3c4b5a69788796a5b4c3d2e1f0, file: .specloop/packs/LP-0001-implement-MNT.md }
+  - { purpose: "specify MNT requirements draft", sha256: 3f1c0a9e5b7d2c4e6f8a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f708192a3b4, file: .mutualspec/packs/LP-0001-specify-MNT.md }
+  - { purpose: "implement AGG-MNT-WORK-ORDER", sha256: 9a8b7c6d5e4f30211203f4e5d6c7b8a90f1e2d3c4b5a69788796a5b4c3d2e1f0, file: .mutualspec/packs/LP-0001-implement-MNT.md }
 modulesChanged:
   - { smc: SMC-UAVM-MNT-WORKORDER-100A, from: new, to: 001-00 }
   - { smc: SMC-UAVM-MNT-WORKORDER-200A, from: new, to: 001-00 }

@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/graph.schema.json",
-  "title": "Spec Graph IR (.specloop/build/graph.json) — 全モジュールを正規化した中間表現。ルールはこれに対して評価される",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/graph.schema.json",
+  "title": "Spec Graph IR (.mutualspec/build/graph.json) — 全モジュールを正規化した中間表現。ルールはこれに対して評価される",
   "type": "object",
-  "required": ["specloop", "project", "builtAt", "sourceHash", "modules", "elements", "edges"],
+  "required": ["mutualspec", "project", "builtAt", "sourceHash", "modules", "elements", "edges"],
   "properties": {
-    "specloop": { "const": "0.1" },
+    "mutualspec": { "const": "0.1" },
     "project": { "type": "object", "required": ["code"], "properties": { "code": { "type": "string" }, "name": { "type": "string" } } },
     "builtAt": { "type": "string", "format": "date-time" },
     "sourceHash": { "type": "string", "description": "全ソースの sha256（再現性）" },

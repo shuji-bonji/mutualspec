@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-040A
 kind: description
 title: "{{タイトル}}"
@@ -17,4 +17,4 @@ owner: "{{@owner}}"
 
 {{このモジュールが必要になった背景。規範はここに書かず、下のブロックに書く。}}
 
-<!-- description モジュールは規範ブロックを持たない（SLR-CORE-00003）。 -->
+<!-- description モジュールは規範ブロックを持たない（MSR-CORE-00003）。 -->

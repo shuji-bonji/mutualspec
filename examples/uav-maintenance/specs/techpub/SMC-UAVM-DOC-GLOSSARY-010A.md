@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-DOC-GLOSSARY-010A
 kind: glossary
 title: 技術文書 用語集
@@ -13,7 +13,7 @@ owner: "@techpub-owner"
 
 # 技術文書 用語集
 
-```yaml specloop:glossary
+```yaml mutualspec:glossary
 terms:
   - id: TERM-DOC-PROCEDURE
     term: 手順

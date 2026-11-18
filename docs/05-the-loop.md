@@ -22,12 +22,12 @@ flowchart LR
 
 | # | フェーズ | 目的 | 入力 | 出力（成果物） | 主担当 | LLM の役割 | 主なコマンド |
 |---|---|---|---|---|---|---|---|
-| ① | **Frame** | 今回のループの目的・対象コンテキスト・範囲を決める | トリガー（要望・FB・不具合・規格更新） | `loops/LP-xxxx/loop.yaml`（goal, contexts, trigger）、ブランチ | Domain Owner | 影響範囲の候補を挙げる（Spec Graph の逆引き結果を要約） | `specloop loop start` |
-| ② | **Specify** | 仕様モジュールを作成・改訂する | Context Pack（specify 用）、テンプレート | 改訂された Spec Module（status draft）、Change Proposal | Spec Author（人）/ LLM drafter | 起草、Change Proposal の作成、未決の問いの列挙 | `specloop new`, `specloop pack`, `specloop apply` |
-| ③ | **Validate** | 仕様を L0〜L4（＋L5 助言）で検証する | Spec Graph、ルールセット | 検証レポート（SARIF / Markdown） | Validator（ツール） | 違反の修正案（Change Proposal）。L5 助言 | `specloop validate`, `specloop render --check` |
-| ④ | **Realize** | 仕様から実装・生成物・文書を作る | approved な仕様、Context Pack（implement 用） | コード、テスト、生成スケルトン、S1000D DM | Implementer（人）/ LLM implementer | 実装、テスト作成（シナリオから） | `specloop generate`, `specloop export s1000d` |
-| ⑤ | **Verify** | 実装・文書が仕様に合っているかを検証する | コード、テスト結果（JUnit XML）、DM | トレース行列、検証レポート | Validator / CI | 失敗の原因が仕様か実装かの切り分け案 | `specloop trace`, `specloop verify` |
-| ⑥ | **Learn** | 運用・現場・判断記録から知見を回収する | 判断記録、障害、レビュー指摘 | `feedback/FB-xxxx.yaml`、トリアージ結果 | Domain Owner / 現場 | 判断記録の集計・パターン抽出（提案のみ） | `specloop feedback add`, `specloop feedback triage` |
+| ① | **Frame** | 今回のループの目的・対象コンテキスト・範囲を決める | トリガー（要望・FB・不具合・規格更新） | `loops/LP-xxxx/loop.yaml`（goal, contexts, trigger）、ブランチ | Domain Owner | 影響範囲の候補を挙げる（Spec Graph の逆引き結果を要約） | `mutualspec loop start` |
+| ② | **Specify** | 仕様モジュールを作成・改訂する | Context Pack（specify 用）、テンプレート | 改訂された Spec Module（status draft）、Change Proposal | Spec Author（人）/ LLM drafter | 起草、Change Proposal の作成、未決の問いの列挙 | `mutualspec new`, `mutualspec pack`, `mutualspec apply` |
+| ③ | **Validate** | 仕様を L0〜L4（＋L5 助言）で検証する | Spec Graph、ルールセット | 検証レポート（SARIF / Markdown） | Validator（ツール） | 違反の修正案（Change Proposal）。L5 助言 | `mutualspec validate`, `mutualspec render --check` |
+| ④ | **Realize** | 仕様から実装・生成物・文書を作る | approved な仕様、Context Pack（implement 用） | コード、テスト、生成スケルトン、S1000D DM | Implementer（人）/ LLM implementer | 実装、テスト作成（シナリオから） | `mutualspec generate`, `mutualspec export s1000d` |
+| ⑤ | **Verify** | 実装・文書が仕様に合っているかを検証する | コード、テスト結果（JUnit XML）、DM | トレース行列、検証レポート | Validator / CI | 失敗の原因が仕様か実装かの切り分け案 | `mutualspec trace`, `mutualspec verify` |
+| ⑥ | **Learn** | 運用・現場・判断記録から知見を回収する | 判断記録、障害、レビュー指摘 | `feedback/FB-xxxx.yaml`、トリアージ結果 | Domain Owner / 現場 | 判断記録の集計・パターン抽出（提案のみ） | `mutualspec feedback add`, `mutualspec feedback triage` |
 
 ## 3. ゲート
 
@@ -36,10 +36,10 @@ flowchart LR
 | **G0** 範囲合意 | Frame → Specify | 対象コンテキストの charter と glossary が存在する | ✅ Domain Owner | loop.yaml |
 | **G1** 仕様承認 | Validate → Realize | error = 0、warning ≤ 設定値、生成ビューが最新、未解決参照 0 | ✅ Domain Owner（PR レビュー） | SARIF、レポート、PR 承認 |
 | **G2** ビルド | Realize → Verify | ビルド成功、生成物が最新（`generate --check`）、S1000D 書き出しの XSD / BREX 検証 0 エラー（プロファイル有効時） | — | CI ログ、SARIF |
-| **G3** 検証完了 | Verify → Learn | must 要求のトレースカバレッジ 100%、関連テスト全合格、SLR-CORE-00207 を error として再評価 | — | トレース行列、JUnit XML |
+| **G3** 検証完了 | Verify → Learn | must 要求のトレースカバレッジ 100%、関連テスト全合格、MSR-CORE-00207 を error として再評価 | — | トレース行列、JUnit XML |
 | **G4** ループ終了 | Learn → 次ループ | 消費した FB がすべて done / deferred、ループ記録の必須項目が埋まっている | ✅ Domain Owner | loop.yaml（status closed） |
 
-- 条件は `specloop.yaml` の `loop.gates` で調整できます（狭める方向のみ推奨）。
+- 条件は `mutualspec.yaml` の `loop.gates` で調整できます（狭める方向のみ推奨）。
 - **ゲートは「機械条件を満たす」ことが必要条件、「人の承認」が十分条件**です。機械条件を満たさないまま人が通すことは `waived` として記録され、理由（`waiverReason`）が必須です。
 - G1 と G4 の人の承認は設定で外せません（[ADR-0009](adr/0009-gates-and-human-approval.md)）。
 
@@ -53,8 +53,8 @@ flowchart TB
   end
   subgraph INNER["内側ループ（分〜時間: 上限 N 回）"]
     direction LR
-    I1["LLM: Change Proposal"] --> I2["specloop apply<br/>（決定的に書き込み）"]
-    I2 --> I3["specloop validate"]
+    I1["LLM: Change Proposal"] --> I2["mutualspec apply<br/>（決定的に書き込み）"]
+    I2 --> I3["mutualspec validate"]
     I3 -->|"違反 + use + rationale"| I1
     I3 -->|"0 error"| I4["人のレビューへ"]
     I3 -->|"N 回で収束せず"| I5["人にエスカレーション"]
@@ -106,7 +106,7 @@ sequenceDiagram
   Sys->>Field: 判断点 JDG に到達（機械は決めない）
   Field->>Sys: 判断結果と理由を記録
   Note over Sys: 判断記録が蓄積される
-  DO->>FB: specloop feedback add --from-judgements JDG-MNT-0001
+  DO->>FB: mutualspec feedback add --from-judgements JDG-MNT-0001
   FB-->>DO: 集計（パターンの候補は LLM が提案）
   DO->>FB: triage: accepted → LP-0002
   FB->>Next: Frame の入力（trigger: feedback）
@@ -123,10 +123,10 @@ sequenceDiagram
 |---|---|
 | ループ | ブランチ `loop/LP-0001-<slug>` と PR 1 本 |
 | Frame | ブランチ作成 + `loops/LP-0001/loop.yaml` のコミット |
-| Specify / Validate の内側ループ | コミット + CI の `specloop validate`（PR に SARIF を表示） |
-| G1 | PR の必須レビュー（CODEOWNERS = コンテキストの owner）+ 必須チェック `specloop gate G1` |
-| Realize / Verify | 同じ PR に実装コミット、CI のテスト + `specloop gate G2/G3` |
-| G4 | `specloop loop close` のコミット、PR マージ |
+| Specify / Validate の内側ループ | コミット + CI の `mutualspec validate`（PR に SARIF を表示） |
+| G1 | PR の必須レビュー（CODEOWNERS = コンテキストの owner）+ 必須チェック `mutualspec gate G1` |
+| Realize / Verify | 同じ PR に実装コミット、CI のテスト + `mutualspec gate G2/G3` |
+| G4 | `mutualspec loop close` のコミット、PR マージ |
 | 履歴 | main のマージコミット = ループ単位の版 |
 
 ループを PR と一致させることで、「どの仕様変更が、どの検証結果と、どの承認で入ったか」が Git の履歴だけで追えます（[ADR-0010](adr/0010-git-as-loop-ledger.md)）。

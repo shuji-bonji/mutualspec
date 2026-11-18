@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-PRJ-RULES-022A
 kind: rules
 title: UAVM プロジェクトルールセット
@@ -15,17 +15,17 @@ owner: "@domain-owner"
 
 S1000D のプロジェクト BREX がデフォルト BREX を継承して狭めるのと同様に、コアルールセットを継承して制約を追加する。
 
-```yaml specloop:rules
+```yaml mutualspec:rules
 ruleset:
   id: SMC-UAVM-PRJ-RULES-022A
   layer: project
-  extends: [SMC-SPECLOOP-CORE-RULES-022A]
+  extends: [SMC-MSPEC-CORE-RULES-022A]
   overrides:
-    - rule: SLR-CORE-00302
+    - rule: MSR-CORE-00302
       severity: error
       reason: 安全に関わる作業指示の要求は 1 文 1 要求を厳守する。
   rules:
-    - id: SLR-PRJ-00001
+    - id: MSR-PRJ-00001
       kind: structure
       select: "$.elements[?(@.type == 'requirement' && @.context == 'MNT')]"
       path: data.verification.method
@@ -36,14 +36,14 @@ ruleset:
         - { form: single, allowed: inspection, meaning: 目視・記録確認 }
       use: MNT の要求は test / demonstration / inspection のいずれかで検証する（analysis は使わない）。
       severity: error
-    - id: SLR-PRJ-00002
+    - id: MSR-PRJ-00002
       kind: structure
       select: "$.elements[?(@.type == 'procedure')]"
       path: data.preliminary.safety
       flag: 1
       use: 手順は必ず事前の安全情報（warning / caution / note）を持つ。
       severity: error
-    - id: SLR-PRJ-00003
+    - id: MSR-PRJ-00003
       kind: structure
       select: "$.elements[?(@.type == 'requirement' && @.data.type == 'safety')]"
       path: data.priority
@@ -52,7 +52,7 @@ ruleset:
         - { form: single, allowed: must, meaning: 安全要求は必須 }
       use: type が safety の要求の priority は must でなければならない。
       severity: error
-    - id: SLR-PRJ-00004
+    - id: MSR-PRJ-00004
       kind: vocabulary
       check: lexicon
       scope: { fields: [statement, text, criteria, prose] }
@@ -62,7 +62,7 @@ ruleset:
         - { match: "ニュートンメートル", hint: "N·m と書く" }
       use: トルクの単位は N·m で表記する。
       severity: error
-    - id: SLR-PRJ-00005
+    - id: MSR-PRJ-00005
       kind: narrative
       use: 実機の数値（閾値・トルク値）をサンプル仕様に持ち込まない。
       severity: info

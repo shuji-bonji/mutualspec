@@ -1,5 +1,5 @@
-# SpecLoop サンプルプロジェクト: 小型 UAV 整備（架空）
-specloop: "0.1"
+# MutualSpec サンプルプロジェクト: 小型 UAV 整備（架空）
+mutualspec: "0.1"
 project:
   code: UAVM
   name: 小型UAV整備サンプル
@@ -22,7 +22,7 @@ loop:
     G4: { humanApproval: true }
 trace:
   codeRoots: [src, tests]
-  annotation: "@specloop"
+  annotation: "@mutualspec"
   testReports: [reports/junit.xml]
 llm:
   packBudgetTokens: 24000
@@ -37,4 +37,4 @@ profiles:
     csdbDir: build/csdb
 output:
   formats: [text, sarif, md]
-  dir: .specloop/reports
+  dir: .mutualspec/reports

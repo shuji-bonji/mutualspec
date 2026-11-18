@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/blocks/behavior.schema.json",
-  "title": "specloop:behavior — 状態遷移（意味モデル層）",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/blocks/behavior.schema.json",
+  "title": "mutualspec:behavior — 状態遷移（意味モデル層）",
   "type": "object",
   "required": ["stateMachines"],
   "properties": {

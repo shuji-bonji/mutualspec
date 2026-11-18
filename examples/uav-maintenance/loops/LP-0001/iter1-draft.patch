@@ -46,7 +46,7 @@
 -      - { from: InProgress, to: Completed, on: CMD-MNT-COMPLETE, guard: [INV-MNT-0002], emits: [EVT-MNT-WORK-ORDER-COMPLETED], requirement: [REQ-MNT-0002] }
  ```
  
- <!-- specloop:generated begin source=SMC-UAVM-MNT-WORKORDER-300A view=state -->
+ <!-- mutualspec:generated begin source=SMC-UAVM-MNT-WORKORDER-300A view=state -->
 --- a/specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md	2026-11-19 04:10:48.481927014 +0900
 +++ b/specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md	2026-11-19 04:13:37.877940433 +0900
 @@ -32,7 +32,7 @@

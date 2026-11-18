@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-MNT-WORKORDER-200A
 kind: model
 title: 作業指示 ドメインモデル
@@ -17,7 +17,7 @@ refs: [SMC-UAVM-MNT-GLOSSARY-010A, SMC-UAVM-MNT-WORKORDER-300A]
 作業指示（WorkOrder）を集約ルートとし、プロペラ点検結果（PropellerInspection）は値オブジェクトとして集約内に持つ。
 点検結果の変更は必ず集約ルートのコマンドを通す。
 
-```yaml specloop:model
+```yaml mutualspec:model
 aggregates:
   - id: AGG-MNT-WORK-ORDER
     name: WorkOrder
@@ -102,7 +102,7 @@ policies:
     description: 交換が必要になったら、ACL を通して PRT に交換用プロペラの在庫を照会する。
 ```
 
-<!-- specloop:generated begin source=SMC-UAVM-MNT-WORKORDER-200A view=class -->
+<!-- mutualspec:generated begin source=SMC-UAVM-MNT-WORKORDER-200A view=class -->
 ```mermaid
 classDiagram
   class WorkOrder {
@@ -131,4 +131,4 @@ classDiagram
   }
   WorkOrder "1" *-- "1..6" PropellerInspection : inspections
 ```
-<!-- specloop:generated end -->
+<!-- mutualspec:generated end -->

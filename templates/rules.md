@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-022A
 kind: rules
 title: "{{タイトル}}"
@@ -19,13 +19,13 @@ owner: "{{@owner}}"
 
 ## 規範（normative）
 
-```yaml specloop:rules
+```yaml mutualspec:rules
 ruleset:
   id: "{{SMC}}"
   layer: project
-  extends: [SMC-SPECLOOP-CORE-RULES-022A]
+  extends: [SMC-MSPEC-CORE-RULES-022A]
   rules:
-    - id: "SLR-{{CONTEXT}}-00001"
+    - id: "MSR-{{CONTEXT}}-00001"
       kind: structure
       select: "$.elements[?(@.type == 'requirement')]"
       path: data.priority

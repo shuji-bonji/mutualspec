@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-020A
 kind: context-map
 title: "{{タイトル}}"
@@ -19,7 +19,7 @@ owner: "{{@owner}}"
 
 ## 規範（normative）
 
-```yaml specloop:context-map
+```yaml mutualspec:context-map
 contexts:
   - { code: "{{CTX}}", name: "{{名前}}", type: core, path: "{{dir}}" }
 relations:

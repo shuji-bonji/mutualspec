@@ -8,7 +8,7 @@ import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "specloop-mmd-"));
+const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "mutualspec-mmd-"));
 const puppeteerCfg = path.join(tmp, "puppeteer.json");
 fs.writeFileSync(puppeteerCfg, JSON.stringify({ args: ["--no-sandbox"], ...(process.env.PUPPETEER_EXECUTABLE_PATH ? { executablePath: process.env.PUPPETEER_EXECUTABLE_PATH } : {}) }));
 const mmdc = path.join(root, "node_modules", ".bin", "mmdc");

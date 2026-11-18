@@ -42,7 +42,7 @@
 - **範囲**: 既定は 1 コンテキスト。越境要素は via / published のものだけを含める（非公開要素は含めない）。
 - **順序**: 決定的（セクション順 → 要素 ID 順）。同じ Graph と引数なら同じバイト列 → 同じ sha256。
 - **予算**: `--budget` を超える場合、削る順は「1 ホップ関連の要約 → 説明の抜粋 → 未使用の用語」。**範囲宣言・用語表の禁止語・ルールの use・出力契約は削らない**。削った場合はヘッダに記録する。
-- **除外**: `.specloopignore` と、フィールド単位の `x-specloop-private: true`（将来）で機密情報を除外する。
+- **除外**: `.mutualspecignore` と、フィールド単位の `x-mutualspec-private: true`（将来）で機密情報を除外する。
 - **形式**: 同内容の Markdown（人が確認できる）と JSON（ツール・構造化入力用）を出す。
 
 ## 3. 出力契約: Change Proposal
@@ -64,10 +64,10 @@
 
 | モード | 設定 `llm.outputContract` | 流れ | 向いている環境 |
 |---|---|---|---|
-| **Proposal モード**（既定） | `change-proposal` | LLM → Change Proposal → `specloop apply`（検証してから書き込み） | チャット型 LLM、API 経由の自動化、レビュー重視 |
-| **Direct-edit モード** | `direct-edit` | コーディングエージェントがファイルを直接編集 → `specloop validate` を必ず実行 | Cursor / Claude Code などのエージェント |
+| **Proposal モード**（既定） | `change-proposal` | LLM → Change Proposal → `mutualspec apply`（検証してから書き込み） | チャット型 LLM、API 経由の自動化、レビュー重視 |
+| **Direct-edit モード** | `direct-edit` | コーディングエージェントがファイルを直接編集 → `mutualspec validate` を必ず実行 | Cursor / Claude Code などのエージェント |
 
-どちらのモードでも、**ゲートを通るのはバリデータを通った成果物だけ**です。Direct-edit モードでは、AGENTS.md（§5）でエージェントに「編集後に必ず `specloop validate --changed --json` を実行し、error が 0 になるまで修正する（最大 N 回）」ことを指示します。
+どちらのモードでも、**ゲートを通るのはバリデータを通った成果物だけ**です。Direct-edit モードでは、AGENTS.md（§5）でエージェントに「編集後に必ず `mutualspec validate --changed --json` を実行し、error が 0 になるまで修正する（最大 N 回）」ことを指示します。
 
 ### 3.2 内側ループの往復
 
@@ -75,28 +75,28 @@
 sequenceDiagram
   autonumber
   participant H as 人（Spec Author）
-  participant CLI as specloop
+  participant CLI as mutualspec
   participant LLM as LLM drafter
-  H->>CLI: specloop pack --purpose specify --context MNT --focus DEC-…
+  H->>CLI: mutualspec pack --purpose specify --context MNT --focus DEC-…
   CLI-->>H: pack.md / pack.json（sha256 をループ記録へ）
   H->>LLM: Pack + 依頼
   LLM-->>H: Change Proposal（JSON）
-  H->>CLI: specloop apply proposal.json --dry-run
+  H->>CLI: mutualspec apply proposal.json --dry-run
   CLI-->>H: 適用結果 + 新たな指摘（JSON）
   alt error あり かつ 反復 < 上限
     H->>LLM: 指摘（ruleId・場所・use・rationale・修正候補）
     LLM-->>H: 修正した Change Proposal
   else error なし
-    H->>CLI: specloop apply proposal.json
+    H->>CLI: mutualspec apply proposal.json
     H->>H: openQuestions に答え、PR でレビュー（G1）
   else 上限到達
     H->>H: 人が直接修正（ルールの use や Pack を見直す）
   end
 ```
 
-## 4. MCP サーバー（`specloop mcp`）
+## 4. MCP サーバー（`mutualspec mcp`）
 
-LLM エージェントが SpecLoop を道具として呼べるようにします。**読み取りと検証が中心で、書き込みは `propose` だけ**（提案ファイルを保存するのみ。正本への適用は人または CLI が行う）。
+LLM エージェントが MutualSpec を道具として呼べるようにします。**読み取りと検証が中心で、書き込みは `propose` だけ**（提案ファイルを保存するのみ。正本への適用は人または CLI が行う）。
 
 | tool | 入力 | 出力 | 副作用 |
 |---|---|---|---|
@@ -110,27 +110,27 @@ LLM エージェントが SpecLoop を道具として呼べるようにします
 | `propose` | Change Proposal | 保存先パス | `loops/LP-xxxx/proposal-n.json` を保存 |
 | `trace` | id? | トレース行列 | なし |
 
-resources: `specloop://glossary/{context}`、`specloop://rules/{context}`、`specloop://charter/{context}`（範囲宣言を常時参照できるようにする）。
+resources: `mutualspec://glossary/{context}`、`mutualspec://rules/{context}`、`mutualspec://charter/{context}`（範囲宣言を常時参照できるようにする）。
 
-s1000d-stack の設計原則（LLM に XML を書かせず、サーバーが判定した結果だけを返す）と同じ考え方で、SpecLoop の MCP も**判定結果だけを返し、判定そのものを LLM に委ねません**。
+s1000d-stack の設計原則（LLM に XML を書かせず、サーバーが判定した結果だけを返す）と同じ考え方で、MutualSpec の MCP も**判定結果だけを返し、判定そのものを LLM に委ねません**。
 
 ## 5. AGENTS.md
 
-`specloop agents-md --write` は、リポジトリの AGENTS.md に次の節を生成・更新します（エージェント向けの慣行ファイル）。
+`mutualspec agents-md --write` は、リポジトリの AGENTS.md に次の節を生成・更新します（エージェント向けの慣行ファイル）。
 
 ```markdown
-## SpecLoop
+## MutualSpec
 
-このリポジトリの仕様は SpecLoop 形式です（specs/ 以下、1 ファイル = 1 Spec Module）。
+このリポジトリの仕様は MutualSpec 形式です（specs/ 以下、1 ファイル = 1 Spec Module）。
 
-- 仕様の規範は ```yaml specloop:<kind> ブロックと front matter だけです。本文は説明です。
+- 仕様の規範は ```yaml mutualspec:<kind> ブロックと front matter だけです。本文は説明です。
 - 用語は各コンテキストの glossary（SMC-*-GLOSSARY-010A）の正式表記と code だけを使ってください。禁止語を使わないでください。
 - 他コンテキストの要素は specs/_project/SMC-*-CONTEXTMAP-020A の via に列挙されたものだけ参照できます。
 - 判断点（JDG）で機械が決めるコードや仕様を書かないでください。
-- 生成ビュー（<!-- specloop:generated --> の間）は編集せず `npx specloop render` を実行してください。
-- 仕様を編集したら必ず `npx specloop validate --changed --json` を実行し、error が 0 になるまで修正してください（最大 3 回。収束しなければ人に報告）。
-- 実装には `// @specloop <ID>` 注釈を付け、テスト名にシナリオ ID（SCN-…）を含めてください。
-- 作業の前に `npx specloop loop current` で現在のループと対象コンテキストを確認してください。
+- 生成ビュー（<!-- mutualspec:generated --> の間）は編集せず `npx mutualspec render` を実行してください。
+- 仕様を編集したら必ず `npx mutualspec validate --changed --json` を実行し、error が 0 になるまで修正してください（最大 3 回。収束しなければ人に報告）。
+- 実装には `// @mutualspec <ID>` 注釈を付け、テスト名にシナリオ ID（SCN-…）を含めてください。
+- 作業の前に `npx mutualspec loop current` で現在のループと対象コンテキストを確認してください。
 ```
 
 ## 6. L5（LLM レビュー）の扱い
@@ -140,7 +140,7 @@ s1000d-stack の設計原則（LLM に XML を書かせず、サーバーが判�
 - 誤検出を減らすため、prompt には「根拠となる ID と文言を引用し、確信が持てない場合は挙げない」を含める（コアルールの例を参照）。
 - 実行は設定またはフラグで明示的に有効にしたときだけ（コストと非決定性のため）。
 
-## 7. 評価（SpecLoop が LLM 連携の質を測る方法）
+## 7. 評価（MutualSpec が LLM 連携の質を測る方法）
 
 | 指標 | 計算 |
 |---|---|

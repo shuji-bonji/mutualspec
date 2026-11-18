@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-200A
 kind: model
 title: "{{タイトル}}"
@@ -19,7 +19,7 @@ owner: "{{@owner}}"
 
 ## 規範（normative）
 
-```yaml specloop:model
+```yaml mutualspec:model
 aggregates:
   - id: "AGG-{{CONTEXT}}-{{SLUG}}"
     name: "{{AggregateName}}"

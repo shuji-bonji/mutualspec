@@ -1,13 +1,13 @@
-# 02. SpecLoop 用語集（フレームワーク自身のユビキタス言語）
+# 02. MutualSpec 用語集（フレームワーク自身のユビキタス言語）
 
-SpecLoop の文書・CLI・スキーマ・ログはこの用語集の語だけを使います。左列が正式表記、`code` はスキーマやコード上の識別子です。
-（この用語集自体も、将来 SpecLoop の `glossary` モジュールとして管理する前提です — [12](12-roadmap.md) の M0「ドッグフーディング」。）
+MutualSpec の文書・CLI・スキーマ・ログはこの用語集の語だけを使います。左列が正式表記、`code` はスキーマやコード上の識別子です。
+（この用語集自体も、将来 MutualSpec の `glossary` モジュールとして管理する前提です — [12](12-roadmap.md) の M0「ドッグフーディング」。）
 
 ## 概念・構造
 
 | 用語 | code | 定義 | 使わない表現 |
 |---|---|---|---|
-| Specs of Domain Loops | — | SpecLoop の基礎概念。コンテキストごとの Domain Loop と、それが読み書きする仕様群 | Domain Loop Specs（前置詞がなく関係が曖昧） |
+| Specs of Domain Loops | — | MutualSpec の基礎概念。コンテキストごとの Domain Loop と、それが読み書きする仕様群 | Domain Loop Specs（前置詞がなく関係が曖昧） |
 | Domain Loop | `loop` | 1 つ以上のコンテキストを対象に、仕様 → 検証 → 実現 → 検証 → 学習を 1 周回す単位。ID は `LP-0001` | イテレーション、スプリント（別概念） |
 | コンテキスト | `context` | 境界づけられたコンテキスト（Bounded Context）。コード（例 `MNT`）とディレクトリを持つ。`PRJ` はプロジェクト全体用に予約 | ドメイン（サブドメインと区別するため単独では使わない） |
 | サブドメイン種別 | `subdomainType` | core / supporting / generic（DDD の分類）。プロジェクト憲章は project | — |
@@ -17,9 +17,9 @@ SpecLoop の文書・CLI・スキーマ・ログはこの用語集の語だけ�
 | Spec Module | `module` | 仕様の最小管理単位。1 ファイル。S1000D の Data Module に相当 | 仕様書（複数モジュールの集合を指す場合と混同する） |
 | SMC | `smc` | Spec Module Code。`SMC-{project}-{context}-{subject}-{kindCode}{variant}` | DMC（S1000D の識別子にのみ使う） |
 | kind | `kind` | モジュールの種別（charter, glossary, context-map, rules, description, requirements, model, behavior, decision, interface, procedure, scenarios）。3 桁の種別コードを持つ | type（要素の種別と区別） |
-| 規範ブロック | `block` | ```` ```yaml specloop:<kind> ```` で囲んだ YAML。仕様の規範（normative）部分 | — |
+| 規範ブロック | `block` | ```` ```yaml mutualspec:<kind> ```` で囲んだ YAML。仕様の規範（normative）部分 | — |
 | 説明 | `prose` | 規範ブロック以外の Markdown 本文。informative | — |
-| 生成ビュー | `generated view` | `specloop render` が規範ブロックから生成する Mermaid 図など。手で編集しない | — |
+| 生成ビュー | `generated view` | `mutualspec render` が規範ブロックから生成する Mermaid 図など。手で編集しない | — |
 | 要素 | `element` | 規範ブロック内の ID を持つもの（REQ, TERM, AGG, ...）。型は `type` | オブジェクト |
 | 要素 ID | `id` | `{PREFIX}-{context}-{local}` 形式（例 `REQ-MNT-0001`）。プロジェクト内で一意 | — |
 | issue | `issue` | モジュールの版。`number`（承認版番号）と `inWork`（作業中番号）。表示は `001-02`。S1000D の issueNumber / inWork に倣う | version（パッケージ版と区別） |
@@ -42,9 +42,9 @@ SpecLoop の文書・CLI・スキーマ・ログはこの用語集の語だけ�
 
 | 用語 | code | 定義 |
 |---|---|---|
-| SLRX | `rules` | SpecLoop Rules eXchange。kind: rules のモジュールに書くルールセット。S1000D BREX の構造（objectPath / allowedObjectFlag / objectValue / objectUse）を Spec Graph に写したもの |
+| MSRX | `rules` | MutualSpec Rules eXchange。kind: rules のモジュールに書くルールセット。S1000D BREX の構造（objectPath / allowedObjectFlag / objectValue / objectUse）を Spec Graph に写したもの |
 | ルールセット層 | `ruleset.layer` | core / organization / project / context。下位は上位を狭めるだけ |
-| ルール | `rule` (SLR) | ID `SLR-{context}-{5 桁}`。kind は structure / vocabulary / reference / semantic / quality / narrative / llm-review |
+| ルール | `rule` (MSR) | ID `MSR-{context}-{5 桁}`。kind は structure / vocabulary / reference / semantic / quality / narrative / llm-review |
 | 規則文 | `use` | ルールの内容を人と LLM が読める 1 文で書いたもの。違反時のメッセージにも使う（BREX の objectUse に相当） |
 | 検証層 | `layer` | L0 スキーマ / L1 構造 / L2 語彙 / L3 参照・境界・意味 / L4 品質（29148）/ L5 LLM 助言 |
 | 指摘 | `finding` | 検証が返す 1 件の結果。severity は error / warning / info / advisory |

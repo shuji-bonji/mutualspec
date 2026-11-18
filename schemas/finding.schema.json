@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/finding.schema.json",
-  "title": "Validation Finding（specloop validate --format json の 1 件）。SARIF 2.1.0 の result に 1:1 で写像",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/finding.schema.json",
+  "title": "Validation Finding（mutualspec validate --format json の 1 件）。SARIF 2.1.0 の result に 1:1 で写像",
   "type": "object",
   "required": ["ruleId", "layer", "severity", "message", "location"],
   "properties": {
-    "ruleId": { "type": "string", "description": "SLR-xxx または SCHEMA (L0)" },
+    "ruleId": { "type": "string", "description": "MSR-xxx または SCHEMA (L0)" },
     "layer": { "enum": ["L0", "L1", "L2", "L3", "L4", "L5"] },
     "severity": { "enum": ["error", "warning", "info", "advisory"] },
     "message": { "type": "string", "description": "具体的な違反内容" },

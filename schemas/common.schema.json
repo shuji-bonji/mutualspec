@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/common.schema.json",
-  "title": "SpecLoop common definitions",
-  "$comment": "$id のドメインは仮置き（ADR-0011 / open question Q-08）。",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/common.schema.json",
+  "title": "MutualSpec common definitions",
+  "$comment": "$id はリポジトリ shuji-bonji/mutualspec の GitHub Pages（https://shuji-bonji.github.io/mutualspec/schemas/0.1/）。リポジトリ名に依存するため、リポジトリを改名する場合は版を上げて移す（ADR-0015）。",
   "$defs": {
     "contextCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9]{1,5}$", "description": "境界づけられたコンテキストのコード。PRJ はプロジェクト全体用に予約。" },
     "projectCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9]{1,7}$" },
@@ -16,12 +16,12 @@
     },
     "elementId": {
       "type": "string",
-      "pattern": "^(REQ|TERM|AGG|ENT|VO|INV|CMD|EVT|POL|BHV|DEC|JDG|PRC|SCN|IFC|REL|SLR)-[A-Z][A-Z0-9]{1,7}-[A-Z0-9][A-Z0-9-]*$"
+      "pattern": "^(REQ|TERM|AGG|ENT|VO|INV|CMD|EVT|POL|BHV|DEC|JDG|PRC|SCN|IFC|REL|MSR)-[A-Z][A-Z0-9]{1,7}-[A-Z0-9][A-Z0-9-]*$"
     },
     "elementRef": {
       "type": "string",
       "description": "要素 ID、SMC、または手順ステップ参照 (PRC-...#S010)",
-      "pattern": "^((REQ|TERM|AGG|ENT|VO|INV|CMD|EVT|POL|BHV|DEC|JDG|PRC|SCN|IFC|REL|SLR)-[A-Z][A-Z0-9]{1,7}-[A-Z0-9][A-Z0-9-]*(#S[0-9]{3})?|SMC-[A-Z][A-Z0-9]{1,7}-[A-Z][A-Z0-9]{1,5}-[A-Z0-9]{1,20}-[0-9]{3}[A-Z]|FB-[0-9]{4}|LP-[0-9]{4})$"
+      "pattern": "^((REQ|TERM|AGG|ENT|VO|INV|CMD|EVT|POL|BHV|DEC|JDG|PRC|SCN|IFC|REL|MSR)-[A-Z][A-Z0-9]{1,7}-[A-Z0-9][A-Z0-9-]*(#S[0-9]{3})?|SMC-[A-Z][A-Z0-9]{1,7}-[A-Z][A-Z0-9]{1,5}-[A-Z0-9]{1,20}-[0-9]{3}[A-Z]|FB-[0-9]{4}|LP-[0-9]{4})$"
     },
     "refList": { "type": "array", "items": { "$ref": "#/$defs/elementRef" }, "uniqueItems": true },
     "codeRef": { "type": "string", "description": "実装・テストへの参照。path または path#symbol", "pattern": "^[^\\s]+$" },

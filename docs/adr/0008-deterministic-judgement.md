@@ -10,7 +10,7 @@
 ## 決定
 
 - 合否判定（ゲートの機械条件）は L0〜L4 の決定的なバリデータだけが行う。
-- LLM の出力は Change Proposal（JSON Schema）として受け取り、`specloop apply` が検証してから決定的に書き込む（既定）。Direct-edit モードでも成果物は同じ検証を通る。
+- LLM の出力は Change Proposal（JSON Schema）として受け取り、`mutualspec apply` が検証してから決定的に書き込む（既定）。Direct-edit モードでも成果物は同じ検証を通る。
 - LLM のレビュー（L5）は advisory で、単独ではゲートを失敗させない。
 - MCP サーバーは判定結果を返し、判定そのものを LLM に委ねない。
 

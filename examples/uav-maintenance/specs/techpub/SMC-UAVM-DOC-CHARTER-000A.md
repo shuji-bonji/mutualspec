@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-DOC-CHARTER-000A
 kind: charter
 title: 技術文書コンテキスト憲章
@@ -13,7 +13,7 @@ owner: "@techpub-owner"
 
 # 技術文書コンテキスト憲章
 
-```yaml specloop:charter
+```yaml mutualspec:charter
 charter:
   context: DOC
   name: 技術文書

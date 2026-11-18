@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-PRT-CHARTER-000A
 kind: charter
 title: 部品コンテキスト憲章
@@ -13,7 +13,7 @@ owner: "@parts-owner"
 
 # 部品コンテキスト憲章
 
-```yaml specloop:charter
+```yaml mutualspec:charter
 charter:
   context: PRT
   name: 部品

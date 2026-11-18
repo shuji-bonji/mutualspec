@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/blocks/charter.schema.json",
-  "title": "specloop:charter — 境界づけられたコンテキスト（またはプロジェクト）の憲章",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/blocks/charter.schema.json",
+  "title": "mutualspec:charter — 境界づけられたコンテキスト（またはプロジェクト）の憲章",
   "type": "object",
   "required": ["charter"],
   "properties": {

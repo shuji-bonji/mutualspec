@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-PRJ-CONTEXTMAP-020A
 kind: context-map
 title: コンテキストマップ
@@ -16,7 +16,7 @@ owner: "@domain-owner"
 整備実施（MNT）がコアドメインです。技術文書（DOC）は MNT とパートナーシップを結び、判断ロジックは MNT が持ち、
 DOC の手順はそれを**参照する**（文書の構造と業務ルールを分離しつつ接続する）。部品（PRT）は Open Host Service として在庫照会を公開し、MNT 側は腐敗防止層で受ける。
 
-```yaml specloop:context-map
+```yaml mutualspec:context-map
 contexts:
   - { code: MNT, name: 整備実施, type: core, path: maintenance, owner: "@maintenance-owner" }
   - { code: DOC, name: 技術文書, type: supporting, path: techpub, owner: "@techpub-owner" }
@@ -36,7 +36,7 @@ relations:
     translation: MNT の Propeller（位置・処置）を PRT の PartNumber 照会に変換する ACL を MNT 側に置く。
 ```
 
-<!-- specloop:generated begin source=SMC-UAVM-PRJ-CONTEXTMAP-020A view=context-map -->
+<!-- mutualspec:generated begin source=SMC-UAVM-PRJ-CONTEXTMAP-020A view=context-map -->
 ```mermaid
 flowchart LR
   MNT["MNT 整備実施<br/>(core)"]
@@ -45,4 +45,4 @@ flowchart LR
   MNT <-->|"Partnership / Published Language"| DOC
   PRT -->|"OHS → ACL<br/>Customer-Supplier"| MNT
 ```
-<!-- specloop:generated end -->
+<!-- mutualspec:generated end -->

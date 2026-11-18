@@ -11,7 +11,7 @@
 
 - 内部形式は finding（ruleId、layer、severity、message、use、location、fix）。
 - 出力は text / json / sarif / md。SARIF は OASIS SARIF 2.1.0 で、GitHub code scanning に PR 注釈として表示できる。
-- SpecLoop 固有の情報（layer、characteristic、elementId、smc、loop）は SARIF の properties に入れる。
+- MutualSpec 固有の情報（layer、characteristic、elementId、smc、loop）は SARIF の properties に入れる。
 
 ## 検討した代替案
 

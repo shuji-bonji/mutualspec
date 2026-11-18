@@ -48,7 +48,7 @@ flowchart LR
 ### ① Frame（G0）
 
 ```bash
-specloop loop start --title "プロペラ点検・交換の作業指示を仕様化する" --context MNT --context DOC --context PRT
+mutualspec loop start --title "プロペラ点検・交換の作業指示を仕様化する" --context MNT --context DOC --context PRT
 # → loops/LP-0001/loop.yaml、ブランチ loop/LP-0001-propeller-workorder
 ```
 
@@ -57,9 +57,9 @@ specloop loop start --title "プロペラ点検・交換の作業指示を仕様
 ### ② Specify（内側ループ 1 回目）
 
 ```bash
-specloop new requirements --context MNT --subject WORKORDER
-specloop pack --purpose specify --context MNT --focus REQ-MNT-0001
-# LLM drafter が Change Proposal を返す → specloop apply
+mutualspec new requirements --context MNT --subject WORKORDER
+mutualspec pack --purpose specify --context MNT --focus REQ-MNT-0001
+# LLM drafter が Change Proposal を返す → mutualspec apply
 ```
 
 LLM の下書きと人の初回修正を合わせた状態が [loops/LP-0001/iter1-draft.patch](../examples/uav-maintenance/loops/LP-0001/iter1-draft.patch) です。典型的な「ずれ」が入っています。
@@ -80,22 +80,22 @@ LLM の下書きと人の初回修正を合わせた状態が [loops/LP-0001/ite
 ### ③ Validate
 
 ```bash
-specloop validate --format text,sarif,md
+mutualspec validate --format text,sarif,md
 ```
 
 実出力（参照チェッカー）:
 
 ```text
-ERROR   SLR-CORE-00202  specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md  ENT-MNT-WORK-ORDER は MNT の非公開要素（block procedure line 35）
-ERROR   SLR-CORE-00101  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md  禁止語「作業依頼」→「作業指示」(TERM-MNT-WORK-ORDER): 作業依頼は、整備管理者が適切に承認するまで作業中に移行してはならない。
-ERROR   SLR-CORE-00101  specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md  禁止語「ペラ」→「プロペラ」(TERM-MNT-PROPELLER): 新しいペラを取り付け、トルクレンチで 0.6 Nm に締め付ける。
-ERROR   SLR-CORE-00301  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md  REQ-MNT-0001: 曖昧語「適切に」: 作業依頼は、整備管理者が適切に承認するまで作業中に移行してはならない。
-WARNING SLR-CORE-00207  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md  REQ-MNT-0002 に verifiedBy がない
-ERROR   SLR-CORE-00305  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md  REQ-MNT-0004: プレースホルダ「TBD」
-ERROR   SLR-CORE-00203  specs/maintenance/SMC-UAVM-MNT-WORKORDER-300A.md  BHV-MNT-WORK-ORDER-LIFECYCLE: InProgress から出られない
-ERROR   SLR-CORE-00203  specs/maintenance/SMC-UAVM-MNT-WORKORDER-300A.md  BHV-MNT-WORK-ORDER-LIFECYCLE: Completed に到達できない
-ERROR   SLR-CORE-00205  specs/maintenance/SMC-UAVM-MNT-PROPDISP-310A.md  DEC-MNT-PROP-DISPOSITION: 入力 [false,1] に 2 行一致
-ERROR   SLR-PRJ-00004   specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md  PRC-DOC-PROPELLER-REPLACE#S040: 「Nm(?![a-z])」 → N·m と書く
+ERROR   MSR-CORE-00202  specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md  ENT-MNT-WORK-ORDER は MNT の非公開要素（block procedure line 35）
+ERROR   MSR-CORE-00101  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md  禁止語「作業依頼」→「作業指示」(TERM-MNT-WORK-ORDER): 作業依頼は、整備管理者が適切に承認するまで作業中に移行してはならない。
+ERROR   MSR-CORE-00101  specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md  禁止語「ペラ」→「プロペラ」(TERM-MNT-PROPELLER): 新しいペラを取り付け、トルクレンチで 0.6 Nm に締め付ける。
+ERROR   MSR-CORE-00301  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md  REQ-MNT-0001: 曖昧語「適切に」: 作業依頼は、整備管理者が適切に承認するまで作業中に移行してはならない。
+WARNING MSR-CORE-00207  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md  REQ-MNT-0002 に verifiedBy がない
+ERROR   MSR-CORE-00305  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md  REQ-MNT-0004: プレースホルダ「TBD」
+ERROR   MSR-CORE-00203  specs/maintenance/SMC-UAVM-MNT-WORKORDER-300A.md  BHV-MNT-WORK-ORDER-LIFECYCLE: InProgress から出られない
+ERROR   MSR-CORE-00203  specs/maintenance/SMC-UAVM-MNT-WORKORDER-300A.md  BHV-MNT-WORK-ORDER-LIFECYCLE: Completed に到達できない
+ERROR   MSR-CORE-00205  specs/maintenance/SMC-UAVM-MNT-PROPDISP-310A.md  DEC-MNT-PROP-DISPOSITION: 入力 [false,1] に 2 行一致
+ERROR   MSR-PRJ-00004   specs/techpub/SMC-UAVM-DOC-PROPREPL-500A.md  PRC-DOC-PROPELLER-REPLACE#S040: 「Nm(?![a-z])」 → N·m と書く
 schemas=19 findings: error=9 warning=1
 ```
 
@@ -126,14 +126,14 @@ schemas=19 findings: error=0 warning=0
 ### ④ Realize
 
 ```bash
-specloop pack --purpose implement --context MNT --focus AGG-MNT-WORK-ORDER
-specloop generate ts --decision DEC-MNT-PROP-DISPOSITION   # 判断表 → 決定的なコード
-specloop generate ts --aggregate AGG-MNT-WORK-ORDER        # 集約のスケルトン → 人 / LLM が実装
-specloop export s1000d --module SMC-UAVM-DOC-PROPREPL-500A --check
+mutualspec pack --purpose implement --context MNT --focus AGG-MNT-WORK-ORDER
+mutualspec generate ts --decision DEC-MNT-PROP-DISPOSITION   # 判断表 → 決定的なコード
+mutualspec generate ts --aggregate AGG-MNT-WORK-ORDER        # 集約のスケルトン → 人 / LLM が実装
+mutualspec export s1000d --module SMC-UAVM-DOC-PROPREPL-500A --check
 ```
 
 - 判断表から生成したコード: [src/contexts/maintenance/PropellerDisposition.ts](../examples/uav-maintenance/src/contexts/maintenance/PropellerDisposition.ts)（行ごとに R01〜R04 のコメント。手で編集しない）
-- 集約の実装: [src/contexts/maintenance/WorkOrder.ts](../examples/uav-maintenance/src/contexts/maintenance/WorkOrder.ts)（`// @specloop CMD-MNT-START INV-MNT-0001 REQ-MNT-0001` のような注釈でトレース）
+- 集約の実装: [src/contexts/maintenance/WorkOrder.ts](../examples/uav-maintenance/src/contexts/maintenance/WorkOrder.ts)（`// @mutualspec CMD-MNT-START INV-MNT-0001 REQ-MNT-0001` のような注釈でトレース）
 - 判断点（escalate）では、コードは決めずに検査員判断の記録を要求する（`complete()` が未記録の判断を拒否）。
 
 ### ⑤ Verify（G2・G3）
@@ -142,10 +142,10 @@ specloop export s1000d --module SMC-UAVM-DOC-PROPREPL-500A --check
 
 ```bash
 npx vitest run --reporter=junit --outputFile=reports/junit.xml   # 6 tests, 0 failures
-specloop trace --format md
+mutualspec trace --format md
 ```
 
-トレース行列（`specloop trace` の出力形式）:
+トレース行列（`mutualspec trace` の出力形式）:
 
 | 要求 | priority | 実現 | シナリオ | テスト | 結果 |
 |---|---|---|---|---|---|
@@ -161,9 +161,9 @@ must 要求のカバレッジ 3/3 = 100% → G3 通過。
 現場運用の 2 日間で、判断点 JDG-MNT-0001（欠け深さ 0.5〜1.0 mm）の判断が 7 件記録されました。
 
 ```bash
-specloop feedback add --from-judgements JDG-MNT-0001 --since 2026-11-10
-specloop feedback triage FB-0001 --accept --loop LP-0002 --reason "判断の規則性が明確"
-specloop loop close
+mutualspec feedback add --from-judgements JDG-MNT-0001 --since 2026-11-10
+mutualspec feedback triage FB-0001 --accept --loop LP-0002 --reason "判断の規則性が明確"
+mutualspec loop close
 ```
 
 - [feedback/FB-0001.yaml](../examples/uav-maintenance/feedback/FB-0001.yaml): 欠けが前縁の外側 1/3 にあった 5 件はすべて replace、それ以外の 2 件は reuse。
@@ -172,8 +172,8 @@ specloop loop close
 ## 4. LP-0002: 判断点を判断表に昇格させる（進行中）
 
 ```bash
-specloop loop start --title "欠け位置を判断表の入力に加える（FB-0001）" --context MNT --context DOC --from-feedback FB-0001
-specloop pack --purpose specify --context MNT --focus DEC-MNT-PROP-DISPOSITION
+mutualspec loop start --title "欠け位置を判断表の入力に加える（FB-0001）" --context MNT --context DOC --from-feedback FB-0001
+mutualspec pack --purpose specify --context MNT --focus DEC-MNT-PROP-DISPOSITION
 ```
 
 - Context Pack: [loops/LP-0002/pack-specify-MNT.md](../examples/uav-maintenance/loops/LP-0002/pack-specify-MNT.md)
@@ -181,7 +181,7 @@ specloop pack --purpose specify --context MNT --focus DEC-MNT-PROP-DISPOSITION
 
 提案は R03 を「位置: 外側 1/3 → replace」「それ以外 → reuse」「位置不明 → escalate（判断点）」に分割し、新しい用語「外側三分の一の欠け」を追加します。注目点:
 
-1. **LLM が自分の提案の欠落を `openQuestions` に書いている**: 判断表の `inputs` に新しい入力を追加する操作が含まれていない。このまま `specloop apply --dry-run` すると SLR-CORE-00211（未宣言の入力 `chipInOuterThird`）で止まります。人は inputs の追加を指示して内側ループを回します。
+1. **LLM が自分の提案の欠落を `openQuestions` に書いている**: 判断表の `inputs` に新しい入力を追加する操作が含まれていない。このまま `mutualspec apply --dry-run` すると MSR-CORE-00211（未宣言の入力 `chipInOuterThird`）で止まります。人は inputs の追加を指示して内側ループを回します。
 2. **範囲外を範囲外として扱っている**: DOC の手順に欠け位置の記録を追加する必要があるが、MNT の Pack の範囲外なので operations に入れず `openQuestions` に書いている。→ DOC の Pack で別の提案を作る（パートナーシップなので同じループで扱える）。
 3. **証拠の少なさを人に委ねている**: reuse 側は 2 件しか実績がない。判断表に昇格させるかどうかは G1 で Domain Owner が判断する。
 
@@ -190,7 +190,7 @@ specloop pack --purpose specify --context MNT --focus DEC-MNT-PROP-DISPOSITION
 ## 5. 自分で確かめる
 
 ```bash
-cd specloop-design
+cd mutualspec-design
 npm install
 npm run check                      # → error=0（サンプルは整合）
 git apply -p1 --directory=examples/uav-maintenance examples/uav-maintenance/loops/LP-0001/iter1-draft.patch   # 下書き状態に戻す

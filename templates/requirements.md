@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-100A
 kind: requirements
 title: "{{タイトル}}"
@@ -19,7 +19,7 @@ owner: "{{@owner}}"
 
 ## 規範（normative）
 
-```yaml specloop:requirements
+```yaml mutualspec:requirements
 requirements:
   - id: "REQ-{{CONTEXT}}-0001"
     level: system

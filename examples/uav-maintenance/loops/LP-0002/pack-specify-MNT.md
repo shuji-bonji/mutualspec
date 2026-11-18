@@ -1,8 +1,8 @@
 <!--
-specloop context pack
+mutualspec context pack
 purpose: specify   loop: LP-0002   context: MNT   focus: DEC-MNT-PROP-DISPOSITION, FB-0001
-sourceHash: (build 時の Spec Graph のハッシュ)   budget: 24000 tokens   generator: specloop 0.1.0
-このファイルは `specloop pack` の出力例です（.specloop/packs/ に生成され、sha256 がループ記録に残る）。
+sourceHash: (build 時の Spec Graph のハッシュ)   budget: 24000 tokens   generator: mutualspec 0.1.0
+このファイルは `mutualspec pack` の出力例です（.mutualspec/packs/ に生成され、sha256 がループ記録に残る）。
 -->
 
 # Context Pack — LP-0002 / MNT 整備実施 / specify
@@ -42,12 +42,12 @@ sourceHash: (build 時の Spec Graph のハッシュ)   budget: 24000 tokens   g
 
 | ルール | 規則文（use） |
 |---|---|
-| SLR-CORE-00205 | hitPolicy が unique の判断表は、入力のどの組み合わせにもちょうど 1 行だけ一致しなければならない（重複なし・漏れなし）。 |
-| SLR-CORE-00211 | 判断表の各行の when / then に使う名前は、inputs / outputs に宣言されていなければならない。enum の値は values に含まれていなければならない。 |
-| SLR-CORE-00101 | 用語集で禁止された語を使ってはならない。正式な用語に置き換える。 |
-| SLR-CORE-00210 | 判断点（JDG）の by / escalateTo は charter の roles に宣言されたロールでなければならない（Technician, Inspector, MaintenanceManager）。 |
-| SLR-CORE-00305 | 承認対象の要素に未決定のプレースホルダ（TBD, 未定 など）を残してはならない。 |
-| SLR-CORE-00403（narrative） | 判断点として切り出した暗黙知は、判断記録をフィードバックとして回収し、判断表へ昇格できないか各ループで見直す。 |
+| MSR-CORE-00205 | hitPolicy が unique の判断表は、入力のどの組み合わせにもちょうど 1 行だけ一致しなければならない（重複なし・漏れなし）。 |
+| MSR-CORE-00211 | 判断表の各行の when / then に使う名前は、inputs / outputs に宣言されていなければならない。enum の値は values に含まれていなければならない。 |
+| MSR-CORE-00101 | 用語集で禁止された語を使ってはならない。正式な用語に置き換える。 |
+| MSR-CORE-00210 | 判断点（JDG）の by / escalateTo は charter の roles に宣言されたロールでなければならない（Technician, Inspector, MaintenanceManager）。 |
+| MSR-CORE-00305 | 承認対象の要素に未決定のプレースホルダ（TBD, 未定 など）を残してはならない。 |
+| MSR-CORE-00403（narrative） | 判断点として切り出した暗黙知は、判断記録をフィードバックとして回収し、判断表へ昇格できないか各ループで見直す。 |
 
 ## 4. 対象の仕様（規範部分のみ）
 

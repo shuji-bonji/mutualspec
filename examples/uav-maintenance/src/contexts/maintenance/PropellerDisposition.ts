@@ -1,5 +1,5 @@
-// 生成元: specloop generate ts --decision DEC-MNT-PROP-DISPOSITION（判断表から決定的に生成。手で編集しない）
-// @specloop DEC-MNT-PROP-DISPOSITION
+// 生成元: mutualspec generate ts --decision DEC-MNT-PROP-DISPOSITION（判断表から決定的に生成。手で編集しない）
+// @mutualspec DEC-MNT-PROP-DISPOSITION
 export type PropellerDisposition = "reuse" | "replace" | "escalate";
 
 export function decidePropellerDisposition(input: { crackFound: boolean; chipDepthMm: number }): PropellerDisposition {

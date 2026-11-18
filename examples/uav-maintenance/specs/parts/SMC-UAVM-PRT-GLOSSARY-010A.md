@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-PRT-GLOSSARY-010A
 kind: glossary
 title: 部品 用語集
@@ -13,7 +13,7 @@ owner: "@parts-owner"
 
 # 部品 用語集
 
-```yaml specloop:glossary
+```yaml mutualspec:glossary
 terms:
   - id: TERM-PRT-PART-NUMBER
     term: 部品番号

@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-MNT-WORKORDER-600A
 kind: scenarios
 title: 作業指示 受け入れシナリオ
@@ -14,7 +14,7 @@ refs: [SMC-UAVM-MNT-WORKORDER-100A]
 
 # 作業指示 受け入れシナリオ
 
-```yaml specloop:scenarios
+```yaml mutualspec:scenarios
 scenarios:
   - id: SCN-MNT-0001
     title: 承認前の作業指示には着手できない

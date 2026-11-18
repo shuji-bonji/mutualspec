@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-PRT-AVAIL-400A
 kind: interface
 title: 部品在庫照会インターフェース
@@ -13,7 +13,7 @@ owner: "@parts-owner"
 
 # 部品在庫照会インターフェース
 
-```yaml specloop:interface
+```yaml mutualspec:interface
 interfaces:
   - id: IFC-PRT-PARTS-AVAILABILITY
     provider: PRT

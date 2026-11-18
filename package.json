@@ -1,8 +1,8 @@
 {
-  "name": "specloop-design",
+  "name": "mutualspec-design",
   "private": true,
   "type": "module",
-  "description": "SpecLoop 設計パッケージ（設計文書・スキーマ・サンプル）。整合性チェックのみを含む",
+  "description": "MutualSpec 設計パッケージ（設計文書・スキーマ・サンプル）。整合性チェックのみを含む",
   "scripts": {
     "check": "node scripts/check-design.mjs",
     "check:mermaid": "node scripts/check-mermaid.mjs"

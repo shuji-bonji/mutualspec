@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-UAVM-MNT-CHARTER-000A
 kind: charter
 title: 整備実施コンテキスト憲章
@@ -13,7 +13,7 @@ owner: "@maintenance-owner"
 
 # 整備実施コンテキスト憲章
 
-```yaml specloop:charter
+```yaml mutualspec:charter
 charter:
   context: MNT
   name: 整備実施

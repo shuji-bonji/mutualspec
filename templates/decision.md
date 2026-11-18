@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-310A
 kind: decision
 title: "{{タイトル}}"
@@ -19,7 +19,7 @@ owner: "{{@owner}}"
 
 ## 規範（normative）
 
-```yaml specloop:decision
+```yaml mutualspec:decision
 decisions:
   - id: "DEC-{{CONTEXT}}-{{SLUG}}"
     question: "{{何を決めるか}}"

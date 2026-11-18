@@ -1,11 +1,11 @@
-# 06. ルール層（SLRX）と検証層
+# 06. ルール層（MSRX）と検証層
 
 ## 1. 考え方
 
 S1000D では、プロジェクトが許す DM の形を **BREX**（それ自体が DM）に機械可読な形で書き、検証ツールが DM を BREX に照らして検査します。
-SpecLoop はこの仕組みを仕様全体に広げ、**SLRX（SpecLoop Rules eXchange）** と呼びます。
+MutualSpec はこの仕組みを仕様全体に広げ、**MSRX（MutualSpec Rules eXchange）** と呼びます。
 
-| 項目 | S1000D BREX | SpecLoop SLRX |
+| 項目 | S1000D BREX | MutualSpec MSRX |
 |---|---|---|
 | ルールの置き場所 | BREX DM（info code 022） | kind: rules のモジュール（種別コード 022） |
 | 対象 | DM の XML | Spec Graph（全モジュールを正規化した JSON） |
@@ -33,7 +33,7 @@ SpecLoop はこの仕組みを仕様全体に広げ、**SLRX（SpecLoop Rules eX
 ### 2.1 ルールの書式
 
 ```yaml
-- id: SLR-PRJ-00001            # SLR-{context}-{5 桁}
+- id: MSR-PRJ-00001            # MSR-{context}-{5 桁}
   kind: structure
   select: "$.elements[?(@.type == 'requirement' && @.context == 'MNT')]"   # 対象（JSONPath）
   path: data.verification.method                                           # 対象からの相対パス
@@ -48,7 +48,7 @@ SpecLoop はこの仕組みを仕様全体に広げ、**SLRX（SpecLoop Rules eX
   decisionRef: BRDP-UAVM-0003   # 業務ルール決定点（任意）
 ```
 
-スキーマ: [schemas/blocks/rules.schema.json](../schemas/blocks/rules.schema.json)。既定ルールの全量: [rules/SMC-SPECLOOP-CORE-RULES-022A.md](../rules/SMC-SPECLOOP-CORE-RULES-022A.md)。
+スキーマ: [schemas/blocks/rules.schema.json](../schemas/blocks/rules.schema.json)。既定ルールの全量: [rules/SMC-MSPEC-CORE-RULES-022A.md](../rules/SMC-MSPEC-CORE-RULES-022A.md)。
 
 `flag` の判定（BREX の allowedObjectFlag と同じ意味）:
 
@@ -75,7 +75,7 @@ SpecLoop はこの仕組みを仕様全体に広げ、**SLRX（SpecLoop Rules eX
 
 ```mermaid
 flowchart TB
-  CORE["core<br/>SMC-SPECLOOP-CORE-RULES-022A<br/>（ツール同梱・default BREX 相当）"]
+  CORE["core<br/>SMC-MSPEC-CORE-RULES-022A<br/>（ツール同梱・default BREX 相当）"]
   ORG["organization<br/>（npm パッケージ等で配布・任意）"]
   PRJ["project<br/>SMC-{P}-PRJ-RULES-022A"]
   CTX["context<br/>SMC-{P}-{CTX}-RULES-022A（任意）"]
@@ -85,7 +85,7 @@ flowchart TB
 
 - 下位は**ルールを追加して狭める**ことだけができる（P4 Narrow, never widen）。
 - `overrides` で上位ルールの severity を**引き上げる**ことは自由。引き下げ・無効化（`disable`）は `reason` 必須で、**core と organization の error ルールは不可**（バリデータが拒否）。
-- 有効なルール集合は `specloop rules list --module <SMC>` で確認できる（適用元のルールセットも表示）。
+- 有効なルール集合は `mutualspec rules list --module <SMC>` で確認できる（適用元のルールセットも表示）。
 - ルールセットの変更自体もループを通す（ルールは仕様の一部）。
 
 ## 4. 検証パイプライン
@@ -107,7 +107,7 @@ flowchart LR
 | 層 | 実装 | 止まり方 |
 |---|---|---|
 | L0 | JSON Schema（Ajv） | L0 でエラーのモジュールは Graph に入れない（他の層の誤検出を防ぐ）。他モジュールの検証は続行 |
-| L1〜L4 | SpecLoop ルールエンジン | すべて実行して全件報告（最初のエラーで止まらない） |
+| L1〜L4 | MutualSpec ルールエンジン | すべて実行して全件報告（最初のエラーで止まらない） |
 | L5 | LLM（任意） | `--advisory` 指定時または設定で有効時のみ。結果は advisory。失敗してもゲートに影響しない |
 
 ### 4.1 バリデータの性質
@@ -115,7 +115,7 @@ flowchart LR
 - **決定的**: 同じ入力（ソース + ルール + ツール版）に対して同じ出力。結果に入力ハッシュ（`sourceHash`）とツール版を記録する。L5 は決定的でないため別枠。
 - **全件報告**: 1 回の実行で見つかる違反をすべて返す。
 - **安定した並び順**: ファイル → 行 → ルール ID。差分レビューしやすくする。
-- **状態による severity 調整**: 一部のルールは status やゲートで severity が変わる（例: SLR-CORE-00305 プレースホルダは draft で warning、approved で error。SLR-CORE-00207 は G3 で error）。調整はルール側の宣言に従い、暗黙には行わない。
+- **状態による severity 調整**: 一部のルールは status やゲートで severity が変わる（例: MSR-CORE-00305 プレースホルダは draft で warning、approved で error。MSR-CORE-00207 は G3 で error）。調整はルール側の宣言に従い、暗黙には行わない。
 - **インクリメンタル**: 変更モジュールと、Graph 上でそれに依存する要素だけを再検査する（`--changed`）。CI では全件。
 - **ローカルと CI で同一**: 同じコマンド・同じ設定。
 
@@ -171,7 +171,7 @@ hitPolicy `unique` の判断表について、入力の型ごとに代表値を�
 | ペラ（俗称） | プロペラ | 「プロペラ処置」で「ペラ」が一致 |
 | 品番 | 部品番号 | 「部品番号」の中の「品番」が一致 |
 
-そこで禁止語検査は次の手順で行います（SLR-CORE-00101 の規定動作）。
+そこで禁止語検査は次の手順で行います（MSR-CORE-00101 の規定動作）。
 
 1. 対象テキスト中の、プロジェクト内の全用語の正式表記と許容別表記（aliases）のうち、禁止語を部分文字列として含み、かつ禁止語より長いものの出現箇所をマスクする（長いものから順に）。
 2. マスク後のテキストで禁止語を探す。
@@ -197,7 +197,7 @@ hitPolicy `unique` の判断表について、入力の型ごとに代表値を�
 | message | 具体的に何が違反か（要素 ID・該当値・抜粋） |
 | use（＋rationale） | なぜ問題か（ルールの規則文と理由） |
 | location | ファイル・行・SMC・要素 ID・フィールドパス |
-| fix | 修正方針と候補。候補が 1 つだけで機械的に適用できる場合は `autoApplicable: true`（`specloop fix` で適用可能） |
+| fix | 修正方針と候補。候補が 1 つだけで機械的に適用できる場合は `autoApplicable: true`（`mutualspec fix` で適用可能） |
 
 ### 6.2 出力形式
 
@@ -211,7 +211,7 @@ hitPolicy `unique` の判断表について、入力の型ごとに代表値を�
 例（text）:
 
 ```text
-ERROR   SLR-CORE-00301  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md:31  REQ-MNT-0001: 曖昧語「適切に」
+ERROR   MSR-CORE-00301  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md:31  REQ-MNT-0001: 曖昧語「適切に」
         なぜ: 要求・不変条件・手順文に曖昧語を使ってはならない（29148 unambiguous）。
         修正: 何をもって適切とするかを数値・基準・参照で示す
 ```
@@ -222,15 +222,15 @@ ERROR   SLR-CORE-00301  specs/maintenance/SMC-UAVM-MNT-WORKORDER-100A.md:31  REQ
 |---|---|
 | 0 | error なし（warning 以下のみ） |
 | 1 | error あり（またはゲート条件の warning 上限超過） |
-| 2 | 使い方・設定の誤り（specloop.yaml 不正、ルールセットの循環 extends など） |
+| 2 | 使い方・設定の誤り（mutualspec.yaml 不正、ルールセットの循環 extends など） |
 | 3 | 内部エラー |
 
 ## 7. 既存のルール技術との関係
 
 | 技術 | 関係 |
 |---|---|
-| JSON Schema | L0 の実装そのもの。ブロックスキーマは SpecLoop が配布 |
-| Spectral（Stoplight） | YAML / JSON に JSONPath でルールを書く点で SLRX の構造ルールと近い。SLRX は複数ファイルを統合した Graph を対象にし、語彙・境界・意味の組込みチェックを持つ点が異なる。interface の外部契約（OpenAPI / AsyncAPI）の検査には Spectral をそのまま併用できる |
+| JSON Schema | L0 の実装そのもの。ブロックスキーマは MutualSpec が配布 |
+| Spectral（Stoplight） | YAML / JSON に JSONPath でルールを書く点で MSRX の構造ルールと近い。MSRX は複数ファイルを統合した Graph を対象にし、語彙・境界・意味の組込みチェックを持つ点が異なる。interface の外部契約（OpenAPI / AsyncAPI）の検査には Spectral をそのまま併用できる |
 | Schematron（ISO/IEC 19757-3） | XML 向けのルール言語。S1000D プロファイルで書き出した DM に対して、BREX を補う追加ルールが必要な場合に使える（任意） |
-| textlint / Vale | 文章の校正ツール。本文の文体（です・ます統一など）は既存ツールに任せ、SpecLoop は用語・曖昧語・文型など**仕様の意味に関わる**検査だけを持つ。textlint の prh 辞書を glossary から生成する機能を将来提供（[12](12-roadmap.md)） |
+| textlint / Vale | 文章の校正ツール。本文の文体（です・ます統一など）は既存ツールに任せ、MutualSpec は用語・曖昧語・文型など**仕様の意味に関わる**検査だけを持つ。textlint の prh 辞書を glossary から生成する機能を将来提供（[12](12-roadmap.md)） |
 | s1kd-brexcheck / s1kd-validate | S1000D プロファイルで書き出した DM の BREX・スキーマ検証に使う（[10](10-s1000d-profile.md)） |

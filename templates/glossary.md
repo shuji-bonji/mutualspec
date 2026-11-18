@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-010A
 kind: glossary
 title: "{{タイトル}}"
@@ -19,7 +19,7 @@ owner: "{{@owner}}"
 
 ## 規範（normative）
 
-```yaml specloop:glossary
+```yaml mutualspec:glossary
 terms:
   - id: "TERM-{{CONTEXT}}-{{SLUG}}"
     term: "{{正式表記}}"

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/blocks/decision.schema.json",
-  "title": "specloop:decision — 判断表（DMN の decision table を簡略化）",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/blocks/decision.schema.json",
+  "title": "mutualspec:decision — 判断表（DMN の decision table を簡略化）",
   "type": "object",
   "required": ["decisions"],
   "properties": {

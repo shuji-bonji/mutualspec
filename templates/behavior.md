@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-300A
 kind: behavior
 title: "{{タイトル}}"
@@ -19,7 +19,7 @@ owner: "{{@owner}}"
 
 ## 規範（normative）
 
-```yaml specloop:behavior
+```yaml mutualspec:behavior
 stateMachines:
   - id: "BHV-{{CONTEXT}}-{{SLUG}}"
     subject: "AGG-{{CONTEXT}}-{{SLUG}}"

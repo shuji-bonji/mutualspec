@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/blocks/rules.schema.json",
-  "title": "specloop:rules — SLRX (SpecLoop Rules eXchange)。S1000D BREX の構造を Spec Graph に写したもの",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/blocks/rules.schema.json",
+  "title": "mutualspec:rules — MSRX (MutualSpec Rules eXchange)。S1000D BREX の構造を Spec Graph に写したもの",
   "type": "object",
   "required": [
     "ruleset"
@@ -77,7 +77,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "pattern": "^SLR-[A-Z][A-Z0-9]{1,7}-[0-9]{5}$"
+          "pattern": "^MSR-[A-Z][A-Z0-9]{1,7}-[0-9]{5}$"
         },
         "kind": {
           "enum": [
@@ -328,7 +328,7 @@
             "properties": {
               "rule": {
                 "type": "string",
-                "pattern": "^SLR-"
+                "pattern": "^MSR-"
               },
               "severity": {
                 "enum": [

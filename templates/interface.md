@@ -1,5 +1,5 @@
 ---
-specloop: "0.1"
+mutualspec: "0.1"
 smc: SMC-{{PROJECT}}-{{CONTEXT}}-{{SUBJECT}}-400A
 kind: interface
 title: "{{タイトル}}"
@@ -19,7 +19,7 @@ owner: "{{@owner}}"
 
 ## 規範（normative）
 
-```yaml specloop:interface
+```yaml mutualspec:interface
 interfaces:
   - id: "IFC-{{CONTEXT}}-{{SLUG}}"
     provider: "{{CONTEXT}}"

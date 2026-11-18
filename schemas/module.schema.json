@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://specloop.dev/schema/0.1/module.schema.json",
+  "$id": "https://shuji-bonji.github.io/mutualspec/schemas/0.1/module.schema.json",
   "title": "Spec Module front matter",
   "description": "Spec Module（.md）の YAML front matter。S1000D の identAndStatusSection に相当。",
   "type": "object",
-  "required": ["specloop", "smc", "kind", "title", "context", "issue", "status", "language", "owner"],
+  "required": ["mutualspec", "smc", "kind", "title", "context", "issue", "status", "language", "owner"],
   "properties": {
-    "specloop": { "const": "0.1", "description": "フォーマット版" },
+    "mutualspec": { "const": "0.1", "description": "フォーマット版" },
     "smc": { "$ref": "common.schema.json#/$defs/smc" },
     "kind": { "$ref": "common.schema.json#/$defs/kind" },
     "title": { "$ref": "common.schema.json#/$defs/localizedText" },
