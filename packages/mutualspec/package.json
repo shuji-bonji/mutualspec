@@ -1,0 +1,31 @@
+{
+  "name": "mutualspec",
+  "version": "0.0.1",
+  "description": "MutualSpec — a framework based on Specs of Domain Loops. Placeholder release: the CLI is not implemented yet.",
+  "keywords": [
+    "mutualspec",
+    "specs-of-domain-loops",
+    "spec-driven-development",
+    "domain-driven-design",
+    "s1000d",
+    "iso-29148"
+  ],
+  "license": "MIT",
+  "author": "shuji-bonji",
+  "homepage": "https://github.com/shuji-bonji/mutualspec#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shuji-bonji/mutualspec.git",
+    "directory": "packages/mutualspec"
+  },
+  "bugs": {
+    "url": "https://github.com/shuji-bonji/mutualspec/issues"
+  },
+  "files": [
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

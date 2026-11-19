@@ -92,6 +92,7 @@ mutualspec/                       ← リポジトリ shuji-bonji/mutualspec（�
 │   └── SMC-MSPEC-CORE-RULES-022A.md ← 既定ルールセット（default BREX に相当）
 ├── templates/                    ← Spec Module テンプレート（kind ごと 12 種）
 ├── examples/uav-maintenance/     ← サンプル: 3 コンテキスト・16 モジュール・ループ 2 周目まで
+├── packages/mutualspec/          ← npm の名前 `mutualspec` を確保するための仮公開パッケージ（CLI は未実装）
 └── scripts/
     ├── check-design.mjs          ← 設計整合性の参照チェッカー（スキーマ・参照・境界・語彙・意味）
     └── check-mermaid.mjs         ← 全 Mermaid 図の構文検証（mermaid-cli）
