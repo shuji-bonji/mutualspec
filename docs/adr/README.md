@@ -21,3 +21,4 @@ MutualSpec の主要な決定の記録です。形式: 状況 → 決定 → 検
 | [0015](0015-rename-to-mutualspec.md) | フレームワーク名を SpecLoop から MutualSpec に変更し、名前空間（npm・CLI・`$id`・識別子）を揃える | Accepted（コアパッケージの中身は 0017 で改訂） |
 | [0016](0016-s1000d-stack-as-default-validator.md) | S1000D の既定の検証器を s1000d-stack にし、s1kd-tools を選択肢として残す | Accepted |
 | [0017](0017-core-and-plugins.md) | 中核の範囲とプラグインの線引き | Accepted |
+| [0018](0018-license.md) | ライセンス: コード・スキーマ・ルール・サンプルは MIT、設計文書は CC BY 4.0 | Accepted |

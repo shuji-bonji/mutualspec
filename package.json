@@ -1,6 +1,7 @@
 {
   "name": "mutualspec-design",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "description": "MutualSpec 設計パッケージ（設計文書・スキーマ・サンプル）。整合性チェックのみを含む",
   "scripts": {

@@ -72,7 +72,7 @@ flowchart LR
 | 13 | [docs/13-open-questions-and-risks.md](docs/13-open-questions-and-risks.md) | 未決事項、解決済みの問い（Q-08 名前衝突調査と MutualSpec への改名を含む）、リスク、前提として置いた仮定 |
 | 14 | [docs/14-future-ingest-and-projection.md](docs/14-future-ingest-and-projection.md) | 将来の拡張候補：取り込みと投影（正本と投影の分離）。未採用。MVP / v1.0 の範囲外 |
 | 15 | [docs/15-future-agent-orchestration.md](docs/15-future-agent-orchestration.md) | 将来の拡張候補：エージェント編成（agentchattr / LangChain / LangGraph / LangSmith）。未採用。MVP / v1.0 の範囲外 |
-| ADR | [docs/adr/](docs/adr/README.md) | 決定記録（命名、正本形式、ID 体系、ルールモデル、ゲート、MutualSpec への改名、S1000D の検証器、中核とプラグインの線引きなど 17 件） |
+| ADR | [docs/adr/](docs/adr/README.md) | 決定記録（命名、正本形式、ID 体系、ルールモデル、ゲート、MutualSpec への改名、S1000D の検証器、中核とプラグインの線引き、ライセンスなど 18 件） |
 
 ## リポジトリ構成
 
@@ -117,6 +117,15 @@ MutualSpec は OpenSpec や GitHub Spec Kit と同じ「仕様駆動開発（SDD
 3. **要求品質を ISO/IEC/IEEE 29148 の特性で検査する**。
 
 既存ツールと競合させず、併用もできるよう設計しています（[docs/07](docs/07-toolchain-architecture.md) §7）。
+
+## ライセンス
+
+| 対象 | ライセンス |
+|---|---|
+| `schemas/`、`rules/`、`templates/`、`scripts/`、`examples/` | [MIT](LICENSE) |
+| `docs/`、`README.md` | [CC BY 4.0](docs/LICENSE) |
+
+スキーマ、テンプレート、既定ルールセット（規則文を含む）、サンプルは、利用者のリポジトリや Context Pack にそのまま写して使えます。設計文書を引用・翻訳・改変して公開するときは、出典を表示してください。決定の記録は [ADR-0018](docs/adr/0018-license.md) です。
 
 ## 商標・規格について
 

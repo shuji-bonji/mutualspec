@@ -1,0 +1,20 @@
+MutualSpec design documents
+Copyright (c) 2026 shuji-bonji
+
+The documents in this directory (docs/) and the README.md at the repository
+root are licensed under the Creative Commons Attribution 4.0 International
+License (CC BY 4.0).
+
+You may share and adapt these documents for any purpose, including
+commercially, as long as you give appropriate credit, provide a link to the
+license, and indicate if changes were made.
+
+License text: https://creativecommons.org/licenses/by/4.0/legalcode
+Summary:      https://creativecommons.org/licenses/by/4.0/
+
+Suggested credit:
+  "MutualSpec design documents" by shuji-bonji
+  https://github.com/shuji-bonji/mutualspec (CC BY 4.0)
+
+Everything outside docs/ and README.md (schemas/, rules/, templates/,
+scripts/, examples/) is licensed under the MIT License. See ../LICENSE.

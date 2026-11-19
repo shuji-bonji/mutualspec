@@ -10,7 +10,6 @@
 | Q-05 | 日本語の語彙検査を形態素解析ベースにするか | 最長一致マスキング（[06](06-rules-and-validation.md) §5.2）。誤検出・見逃しの実績を見て判断 | M2 |
 | Q-06 | JSONPath ライブラリの選定（RFC 9535 準拠度） | 候補 jsonpath-plus。準拠テストで評価 | M1 |
 | Q-07 | 1 ループの主対象を 1 コンテキストに制限するか | 推奨にとどめた（パートナーシップは複数可） | M3 |
-| Q-09 | ライセンス | 未定。依存（Ajv: MIT、Mermaid: MIT、remark: MIT、s1000d-core など）を踏まえて決める。s1kd-tools（GPL-3.0）は既定の検証器ではなくなり、`validator: s1kd-tools` のときだけ外部コマンドとして呼ぶ（ADR-0016） | M0 |
 | Q-10 | 要求の `priority` を must / should / could の 3 値で足りるか | 3 値。組織ルールで追加の区分が必要なら拡張 | M1 |
 | Q-11 | s1000d-stack との連携の深さ | 検証は s1000d-core をライブラリとして直接使う（既定の検証器。ADR-0016）。書き出しに s1000d-core の `buildDataModule` を使うかは M6 で判断 | M6 |
 | Q-12 | 用語集をコンテキストをまたいで共有する（shared kernel）場合の運用 | 共有部分を専用コンテキストに切り出す方針のみ決定 | M3 |
@@ -124,6 +123,7 @@ npm ユーザー `shuji-bonji` は、`https://registry.npmjs.org/-/user/shuji-bo
 |---|---|---|---|
 | Q-08 | パッケージ名・CLI 名・スキーマ `$id` のドメイン（SpecLoop の名前衝突） | **フレームワーク名を MutualSpec に変更**（[ADR-0015](adr/0015-rename-to-mutualspec.md)）。npm は `mutualspec`（CLI、bin `mutualspec`）と `@shuji-bonji/mutualspec-*`（ライブラリ）。短い別名 `mspec` は既存 npm パッケージと衝突するため設けない。`$id` は `https://shuji-bonji.github.io/mutualspec/schemas/0.1/…`（リポジトリの GitHub Pages）。概念名 Specs of Domain Loops は維持。リポジトリも `shuji-bonji/mutualspec` に改名済み（旧 URL は GitHub がリダイレクト）。商標は未確認（R-08）。調査は §1.1・§1.2 | 2026-11-19 |
 | Q-01 | 会話中の「XML（**XDL** や S1000D）」の **XDL** は何を指すか | **XSD（XML Schema Definition）の誤記**。別の XML 語彙ではなかった。会話では機械可読な構造として JSON / YAML / XML Schema が挙げられており、本設計の正本は JSON Schema と YAML、S1000D プロファイル側で XML / XSD を扱う。XDL を理由にした 2 つ目のプロファイルは追加しない。[00](00-origin.md) §4 | 2026-11-19 |
+| Q-09 | ライセンス | **コード・スキーマ・既定ルールセット・テンプレート・サンプルは MIT、設計文書（`docs/` と `README.md`）は CC BY 4.0**（[ADR-0018](adr/0018-license.md)）。依存（Ajv、remark、Mermaid、s1000d-core）はいずれも MIT で、制約にならない。s1kd-tools（GPL-3.0）は `validator: s1kd-tools` のときだけ外部コマンドとして呼ぶ（ADR-0016）。当面の決定であり、著作権者が所有者だけの間は、将来の版のライセンスを変えられる | 2026-11-19 |
 
 ## 2. リスク
 
