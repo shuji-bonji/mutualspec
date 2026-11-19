@@ -44,9 +44,9 @@ flowchart LR
 - G1 と G4 の人の承認は設定で外せません（[ADR-0009](adr/0009-gates-and-human-approval.md)）。
 
 > [!NOTE]
-> ループは、Accepted の決定記録を起点に始められます（`trigger.type: decision`、`refs` に ADR または決定記録の ID）。判断のループ（提案から決定まで。[ADR-0019](adr/0019-decision-loop-and-adr-plugin.md)）と、仕様のループをこれでつなぎます。
-> このループの中で下した決定は `decisions`（出力）に書き、起点にした決定は `trigger`（入力）に書きます。
-> 決定の記録は中核の kind ではなくプラグインです（[ADR-0017](adr/0017-core-and-plugins.md)、ADR-0019）。G0 が `refs` の Accepted を確かめるのは、決定のプラグインが有効なときだけです。プラグインが無いとき、G0 の機械条件は charter と glossary のままです。Accepted は、`docs/adr` では状態が Accepted であること、プラグインのモジュールでは ADR-0019 の D-5（`status: approved` かつ `outcome: accepted`）に従います。
+> ループは、Accepted の決定記録を起点に始められます（`trigger.type: decision`）。このとき `refs` は必須で、起点にした決定記録の ID を 1 件以上書きます。`docs/adr` の ADR は `ADR-0019` の形で書きます。プラグインのモジュールの ID の形式は、ADR-0019 の D-4 で決めます。判断のループ（提案から決定まで。[ADR-0019](adr/0019-decision-loop-and-adr-plugin.md)）と、仕様のループをこれでつなぎます。
+> このループの中で下した決定は `decisions`（出力）に書き、起点にした決定は `trigger`（入力）に書きます。`decisions` には、決定記録があればその ID を、無ければ決定の内容を文で書きます。
+> 決定の記録は中核の kind ではなくプラグインです（[ADR-0017](adr/0017-core-and-plugins.md)、ADR-0019）。G0 が `refs` の Accepted を確かめるのは、決定のプラグインが有効なときだけです。プラグインが無いとき、G0 の機械条件は charter と glossary のままです。このとき `refs` の決定が Accepted かどうかは機械では確かめないので、G0 を承認する Domain Owner が確かめます（`docs/adr` で試す段階はこれに当たります）。Accepted は、`docs/adr` では状態が Accepted であること、プラグインのモジュールでは ADR-0019 の D-5（`status: approved` かつ `outcome: accepted`）に従います。
 
 ## 4. 内側ループと外側ループ
 

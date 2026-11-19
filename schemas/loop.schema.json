@@ -17,11 +17,13 @@
         },
         "refs": {
           "type": "array",
-          "description": "トリガーの参照先。type が decision のときは、起点にした ADR または決定記録の ID（プラグインのモジュールならその SMC。docs/adr の ADR ならその番号）",
-          "items": { "type": "string" }
+          "description": "トリガーの参照先。type が decision のときは必須で、起点にした決定記録の ID を 1 件以上書く。docs/adr の ADR は ADR-0019 のように ADR- と 4 桁の番号で書く。プラグインのモジュールの ID の形式は ADR-0019 の D-4 で決める",
+          "items": { "type": "string", "minLength": 1 }
         },
         "description": { "type": "string", "description": "トリガーの説明" }
       },
+      "if": { "properties": { "type": { "const": "decision" } }, "required": ["type"] },
+      "then": { "required": ["refs"], "properties": { "refs": { "minItems": 1 } } },
       "additionalProperties": false
     },
     "goal": { "type": "string" },
@@ -92,7 +94,7 @@
     "decisions": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "このループの中で下した決定の ID（出力）。ループを始めた決定（入力）は trigger.type が decision のときの trigger.refs に書く"
+      "description": "このループの中で下した決定（出力）。決定記録があればその ID を、無ければ決定の内容を文で書く。ループを始めた決定（入力）は trigger.type が decision のときの trigger.refs に書く"
     },
     "outcome": { "type": "string" }
   },
