@@ -1,6 +1,6 @@
 # ADR（Architecture Decision Records）
 
-MutualSpec の主要な決定の記録です。形式: 状況 → 決定 → 検討した代替案 → 結果。日付はすべて 2026-11-19（設計完結時点）。
+MutualSpec の主要な決定の記録です。形式: 状況 → 決定 → 検討した代替案 → 結果。0001〜0018 の日付は 2026-11-19（設計完結時点）。0019 からは、決定の前に Proposed の状態で起こします。
 
 | ADR | タイトル | 状態 |
 |---|---|---|
@@ -22,3 +22,4 @@ MutualSpec の主要な決定の記録です。形式: 状況 → 決定 → 検
 | [0016](0016-s1000d-stack-as-default-validator.md) | S1000D の既定の検証器を s1000d-stack にし、s1kd-tools を選択肢として残す | Accepted |
 | [0017](0017-core-and-plugins.md) | 中核の範囲とプラグインの線引き | Accepted |
 | [0018](0018-license.md) | ライセンス: コード・スキーマ・ルール・サンプルは MIT、設計文書は CC BY 4.0 | Accepted |
+| [0019](0019-decision-loop-and-adr-plugin.md) | 判断のループ: ADR を提案から決定まで回し、決定の記録をプラグインとして提供する | Proposed |
