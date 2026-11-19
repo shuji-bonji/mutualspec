@@ -16,6 +16,7 @@
 | Q-13 | 顧客の様式を変えず、取り込み（入口）と投影（出口）で正本と顧客文書を分ける拡張を採用するか。するならいつか | 将来の拡張候補として [14](14-future-ingest-and-projection.md) に記録しただけ。MVP と v1.0 には入れない。採ると決めるまでスキーマ・CLI・マイルストーンは変えない | 未定（v1.0 より後。採用するかどうか自体が未決） |
 | Q-14 | agentchattr、LangChain、LangGraph、LangSmith で、誰がいつ走るかと実行記録だけを編成する拡張を採用するか。するならいつか | 将来の拡張候補として [15](15-future-agent-orchestration.md) に記録しただけ。正本と判定は MutualSpec のまま。コアはこれらのツールに依存しない。MVP と v1.0 には入れない | M4 以降（LLM 連携のあと。採用するかどうか自体が未決） |
 | Q-15 | ループ・ゲート・指摘を見る画面を、端末の表、静的 HTML、localhost の一覧のどこまで持つか | 将来の拡張候補として [15](15-future-agent-orchestration.md) §6 に記録しただけ。状態の正は Git と SARIF。表示は generator（render）で読むだけ。view という拡張点は作らない（[ADR-0017](adr/0017-core-and-plugins.md)）。中核は変えない。MVP と v1.0 には入れない。編成の採否（Q-14）とは別に決める | 未定（v1.0 より後。採用するかどうか自体が未決） |
+| Q-16 | 周辺プラクティスのうち、最初に試すのは AGENTS.md などの生成か、RFC（判断のループの入口）か | 将来の拡張候補として [16](16-future-adjacent-practices.md) に記録しただけ。中核は変えない。拡張点は check / generator / profile。MVP と v1.0 には入れない。一覧の優先度は高・中・低の目安であり、採否は未決 | 未定（v1.0 より後。採用するかどうか自体が未決） |
 
 ### 1.1 Q-08 名前衝突調査（2026-11-19、Asia/Tokyo）— 旧称 SpecLoop の調査記録
 

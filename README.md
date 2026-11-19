@@ -86,6 +86,7 @@ MutualSpec は、次の方法論と規格の言葉を借りています。定義
 | 13 | [docs/13-open-questions-and-risks.md](docs/13-open-questions-and-risks.md) | 未決事項、解決済みの問い（Q-08 名前衝突調査と MutualSpec への改名を含む）、リスク、前提として置いた仮定 |
 | 14 | [docs/14-future-ingest-and-projection.md](docs/14-future-ingest-and-projection.md) | 将来の拡張候補：取り込みと投影（正本と投影の分離）。未採用。MVP / v1.0 の範囲外 |
 | 15 | [docs/15-future-agent-orchestration.md](docs/15-future-agent-orchestration.md) | 将来の拡張候補：エージェント編成（agentchattr / LangChain / LangGraph / LangSmith）。未採用。MVP / v1.0 の範囲外 |
+| 16 | [docs/16-future-adjacent-practices.md](docs/16-future-adjacent-practices.md) | 将来の候補：開発プロセスの周辺プラクティスとの接続。未採用。MVP / v1.0 の範囲外 |
 | ADR | [docs/adr/](docs/adr/README.md) | 決定記録（命名、正本形式、ID 体系、ルールモデル、ゲート、MutualSpec への改名、S1000D の検証器、中核とプラグインの線引き、ライセンスなど 18 件） |
 
 ## リポジトリ構成
@@ -93,7 +94,7 @@ MutualSpec は、次の方法論と規格の言葉を借りています。定義
 ```text
 mutualspec/                       ← リポジトリ shuji-bonji/mutualspec（設計パッケージ mutualspec-design）
 ├── README.md                     ← この文書（入口）
-├── docs/                         ← 設計文書 00〜15 と ADR
+├── docs/                         ← 設計文書 00〜16 と ADR
 ├── schemas/                      ← JSON Schema (draft 2020-12)
 │   ├── common.schema.json        ← 共通定義（ID・SMC・適用性・判断点・トレース）
 │   ├── module.schema.json        ← Spec Module の front matter
