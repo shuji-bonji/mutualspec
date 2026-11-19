@@ -22,7 +22,7 @@ flowchart LR
 
 | # | フェーズ | 目的 | 入力 | 出力（成果物） | 主担当 | LLM の役割 | 主なコマンド |
 |---|---|---|---|---|---|---|---|
-| ① | **Frame** | 今回のループの目的・対象コンテキスト・範囲を決める | トリガー（要望・FB・不具合・規格更新） | `loops/LP-xxxx/loop.yaml`（goal, contexts, trigger）、ブランチ | Domain Owner | 影響範囲の候補を挙げる（Spec Graph の逆引き結果を要約） | `mutualspec loop start` |
+| ① | **Frame** | 今回のループの目的・対象コンテキスト・範囲を決める | トリガー（要望・変更要求・FB・不具合・規格更新・決定） | `loops/LP-xxxx/loop.yaml`（goal, contexts, trigger）、ブランチ | Domain Owner | 影響範囲の候補を挙げる（Spec Graph の逆引き結果を要約） | `mutualspec loop start` |
 | ② | **Specify** | 仕様モジュールを作成・改訂する | Context Pack（specify 用）、テンプレート | 改訂された Spec Module（status draft）、Change Proposal | Spec Author（人）/ LLM drafter | 起草、Change Proposal の作成、未決の問いの列挙 | `mutualspec new`, `mutualspec pack`, `mutualspec apply` |
 | ③ | **Validate** | 仕様を L0〜L4（＋L5 助言）で検証する | Spec Graph、ルールセット | 検証レポート（SARIF / Markdown） | Validator（ツール） | 違反の修正案（Change Proposal）。L5 助言 | `mutualspec validate`, `mutualspec render --check` |
 | ④ | **Realize** | 仕様から実装・生成物・文書を作る | approved な仕様、Context Pack（implement 用） | コード、テスト、生成スケルトン、S1000D DM | Implementer（人）/ LLM implementer | 実装、テスト作成（シナリオから） | `mutualspec generate`, `mutualspec export s1000d` |
@@ -33,7 +33,7 @@ flowchart LR
 
 | ゲート | 位置 | 機械条件（既定） | 人の承認（既定） | 証跡 |
 |---|---|---|---|---|
-| **G0** 範囲合意 | Frame → Specify | 対象コンテキストの charter と glossary が存在する | ✅ Domain Owner | loop.yaml |
+| **G0** 範囲合意 | Frame → Specify | 対象コンテキストの charter と glossary が存在する。決定のプラグインが有効で `trigger.type` が `decision` のときは、`refs` の決定記録が Accepted | ✅ Domain Owner | loop.yaml |
 | **G1** 仕様承認 | Validate → Realize | error = 0、warning ≤ 設定値、生成ビューが最新、未解決参照 0 | ✅ Domain Owner（PR レビュー） | SARIF、レポート、PR 承認 |
 | **G2** ビルド | Realize → Verify | ビルド成功、生成物が最新（`generate --check`）、S1000D 書き出しの XSD / BREX 検証 0 エラー（プロファイル有効時） | — | CI ログ、SARIF |
 | **G3** 検証完了 | Verify → Learn | must 要求のトレースカバレッジ 100%、関連テスト全合格、MSR-CORE-00207 を error として再評価 | — | トレース行列、JUnit XML |
@@ -42,6 +42,11 @@ flowchart LR
 - 条件は `mutualspec.yaml` の `loop.gates` で調整できます（狭める方向のみ推奨）。
 - **ゲートは「機械条件を満たす」ことが必要条件、「人の承認」が十分条件**です。機械条件を満たさないまま人が通すことは `waived` として記録され、理由（`waiverReason`）が必須です。
 - G1 と G4 の人の承認は設定で外せません（[ADR-0009](adr/0009-gates-and-human-approval.md)）。
+
+> [!NOTE]
+> ループは、Accepted の決定記録を起点に始められます（`trigger.type: decision`、`refs` に ADR または決定記録の ID）。判断のループ（提案から決定まで。[ADR-0019](adr/0019-decision-loop-and-adr-plugin.md)）と、仕様のループをこれでつなぎます。
+> このループの中で下した決定は `decisions`（出力）に書き、起点にした決定は `trigger`（入力）に書きます。
+> 決定の記録は中核の kind ではなくプラグインです（[ADR-0017](adr/0017-core-and-plugins.md)、ADR-0019）。G0 が `refs` の Accepted を確かめるのは、決定のプラグインが有効なときだけです。プラグインが無いとき、G0 の機械条件は charter と glossary のままです。Accepted は、`docs/adr` では状態が Accepted であること、プラグインのモジュールでは ADR-0019 の D-5（`status: approved` かつ `outcome: accepted`）に従います。
 
 ## 4. 内側ループと外側ループ
 

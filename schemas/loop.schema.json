@@ -11,9 +11,16 @@
     "trigger": {
       "type": "object", "required": ["type"],
       "properties": {
-        "type": { "enum": ["initiative", "feedback", "defect", "change-request", "standard-update"] },
-        "refs": { "type": "array", "items": { "type": "string" } },
-        "description": { "type": "string" }
+        "type": {
+          "enum": ["initiative", "feedback", "defect", "change-request", "standard-update", "decision"],
+          "description": "ループを始めた理由（入力）。initiative=要望、change-request=変更要求、feedback=FB、defect=不具合、standard-update=規格更新、decision=Accepted の決定記録。このループの中で下した決定は decisions（出力）に書く"
+        },
+        "refs": {
+          "type": "array",
+          "description": "トリガーの参照先。type が decision のときは、起点にした ADR または決定記録の ID（プラグインのモジュールならその SMC。docs/adr の ADR ならその番号）",
+          "items": { "type": "string" }
+        },
+        "description": { "type": "string", "description": "トリガーの説明" }
       },
       "additionalProperties": false
     },
@@ -82,7 +89,11 @@
     },
     "feedbackConsumed": { "type": "array", "items": { "type": "string", "pattern": "^FB-[0-9]{4}$" } },
     "feedbackCreated": { "type": "array", "items": { "type": "string", "pattern": "^FB-[0-9]{4}$" } },
-    "decisions": { "type": "array", "items": { "type": "string" }, "description": "このループで下した判断（ADR 参照可）" },
+    "decisions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "このループの中で下した決定の ID（出力）。ループを始めた決定（入力）は trigger.type が decision のときの trigger.refs に書く"
+    },
     "outcome": { "type": "string" }
   },
   "additionalProperties": false

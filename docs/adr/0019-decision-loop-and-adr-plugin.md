@@ -29,7 +29,7 @@ ADR-0001〜0018 は、すべて決定のあとに書かれた（状態は Accept
 | 3 | ID は今ある仕組みを使う | `elementId` の接頭辞は固定の列挙（`REQ`、`TERM`、…、`MSR`）である。新しい接頭辞を持つ ID は `elementRef` の検査を通らない |
 | 4 | 状態は Proposed から Accepted へ進む | モジュールの `status` は `draft / proposed / approved / deprecated / retired` である。Rejected に当たる値が無い |
 | 5 | 置き換えは両方向にリンクする | front matter にあるのは `supersedes`（新しい側から古い側へ）だけである |
-| 6 | 決定が仕様のループを始める | `loop.schema.json` の `trigger.type` は `initiative / feedback / defect / change-request / standard-update` で、「決定」は無い。`trigger.refs` は文字列の配列で、SMC を書ける |
+| 6 | 決定が仕様のループを始める | D-8 で解消。`trigger.type` に `decision` を足した。`refs` は起点にした ADR または決定記録の ID。`decisions` はこのループで下した決定（出力） |
 
 2 は ADR に限らない。specialized-agent の Family マニフェストをプラグインの kind にするときも、同じ箇所で止まる。
 
@@ -180,8 +180,9 @@ flowchart LR
 | D-3 | a: 中核の `kind` を「既定の 12 個、または有効な profile が登録した kind」に広げる | 2026-11-20 | 中核のスキーマ（`common.schema.json` の `kind`、`mutualspec.config.schema.json` の `profiles`）を変える。[ADR-0017](0017-core-and-plugins.md) の改訂として扱うかは未決。登録の書き方（profile が kind 名・種別コード・スキーマを渡す形）は段階 2 で決める |
 | D-5 | b: `status` は `proposed` / `approved` / `deprecated` に写し、ブロックに `outcome`（`accepted / rejected`）を持つ | 2026-11-20 | 状態に関わる項目が `status` と `outcome` の 2 つになる（C4）。check で組み合わせを検査することが前提になる。Rejected のときの `status` の値は未決 |
 | D-7 | a: 任意にする。通す目安だけを文書に書く | 2026-11-20 | G0 の機械条件は変えない。目安の文面は段階 1 の試行で決める |
+| D-8 | b: `trigger.type` に `decision` を足す。`refs` は起点の ADR または決定記録の ID | 2026-11-20 | 中核の enum に値を 1 つ足す。決定の kind は中核に入れない（C1）。D-7 で採らなかったのは「未決の Proposed を G0 で止める」こと。足す検査は、`type` が `decision` のとき `refs` が Accepted かだけで、決定のプラグインが有効なときに限る（[05](../05-the-loop.md)） |
 
-D-1、D-2、D-4、D-6、D-8、D-9 は未決である。
+D-1、D-2、D-4、D-6、D-9 は未決である。
 
 ## 結果
 
